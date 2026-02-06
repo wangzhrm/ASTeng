@@ -6,50 +6,14 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <style>
-        body {
-            margin: 0;
-            background: #fdfdfd;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            font-family: 'Georgia', serif;
-        }
-        .container {
-            background: white;
-            width: 90%;
-            max-width: 750px;
-            padding: 60px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            border-radius: 2px;
-            line-height: 1.9;
-            font-size: 1.2em;
-            color: #2c3e50;
-            white-space: pre-wrap;
-            position: relative;
-        }
-        mark {
-            background-color: #fff176;
-            color: black;
-            padding: 2px 0; /* Tight padding for multi-line highlights */
-            border-radius: 2px;
-        }
-        .header-info {
-            font-family: sans-serif;
-            font-size: 0.7em;
-            color: #bdc3c7;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border-bottom: 1px solid #eee;
-            margin-bottom: 30px;
-            padding-bottom: 10px;
-        }
+        body { margin: 0; background: #fdfdfd; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Georgia', serif; }
+        .container { background: white; width: 90%; max-width: 750px; padding: 60px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-radius: 2px; line-height: 1.9; font-size: 1.2em; color: #2c3e50; white-space: pre-wrap; position: relative; }
+        mark { background-color: #fff176; color: black; padding: 2px 0; border-radius: 2px; }
+        .header-info { font-family: sans-serif; font-size: 0.7em; color: #bdc3c7; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #eee; margin-bottom: 30px; padding-bottom: 10px; }
     </style>
 </head>
 <body>
-
 <div id="viewer" class="container">Retrieving passage...</div>
-
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyDQP8wkV6Hu314ajhwcWGfyD8PIeeUh7Zo",
@@ -59,62 +23,37 @@
         messagingSenderId: "476969710355",
         appId: "1:476969710355:web:d993d06afb8873fbc220e6"
     };
-    
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-
     const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
-    const sParam = params.get('s'); // String like "10,50"
-    const eParam = params.get('e'); // String like "20,60"
+    const id = params.get('id'), sParam = params.get('s'), eParam = params.get('e');
 
     if (id && sParam && eParam) {
-        // Fetch from Firestore 'passages' collection
         db.collection('passages').doc(id).get().then(doc => {
             if (doc.exists) {
                 const data = doc.data();
-                let fullText = data.content;
+                const fullText = data.content;
+                const starts = sParam.split(',').map(Number);
+                const ends = eParam.split(',').map(Number);
+                let regions = starts.map((sVal, i) => ({ start: sVal, end: ends[i] }));
 
-                // 1. Convert comma strings into arrays of integers
-                const starts = sParam.split(',').map(n => parseInt(n));
-                const ends = eParam.split(',').map(n => parseInt(n));
-
-                // 2. Map to objects for easier handling
-                let regions = starts.map((sVal, i) => ({
-                    start: sVal,
-                    end: ends[i]
-                }));
-
-                // 3. SORT BACKWARDS (Highest index first)
-                // This is vital: if we insert tags at the end of the text,
-                // the indices for the earlier parts of the text stay correct.
+                // Reverse sort to prevent index shifting during string injection
                 regions.sort((a, b) => b.start - a.start);
 
-                // 4. Inject <mark> tags into the string
                 let processedText = fullText;
                 regions.forEach(reg => {
                     const before = processedText.substring(0, reg.start);
-                    const highlighted = processedText.substring(reg.start, reg.end);
+                    const mid = processedText.substring(reg.start, reg.end);
                     const after = processedText.substring(reg.end);
-                    
-                    processedText = before + "<mark>" + highlighted + "</mark>" + after;
+                    processedText = before + "<mark>" + mid + "</mark>" + after;
                 });
 
-                // 5. Render to screen
                 document.getElementById('viewer').innerHTML = `
                     <div class="header-info">${data.test || 'AST'} / ${data.text || 'Reading'}</div>
-                    <div>${processedText}</div>
-                `;
-            } else {
-                document.getElementById('viewer').innerText = "Passage not found.";
-            }
-        }).catch(err => {
-            console.error(err);
-            document.getElementById('viewer').innerText = "Error loading content.";
+                    <div>${processedText}</div>`;
+            } else { document.getElementById('viewer').textContent = "Passage not found."; }
         });
-    } else {
-        document.getElementById('viewer').innerText = "Invalid URL parameters.";
-    }
+    } else { document.getElementById('viewer').textContent = "Invalid URL parameters."; }
 </script>
 </body>
 </html>
