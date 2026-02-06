@@ -2,16 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AST Admin - Link Manager</title>
+    <title>AST Admin - Interactive Multi-Link</title>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <style>
-        :root { --primary: #2c3e50; --accent: #3498db; --success: #27ae60; --bg: #f8f9fa; }
+        :root { --primary: #2c3e50; --accent: #3498db; --success: #27ae60; --bg: #f8f9fa; --warning: #e67e22; }
         body { font-family: 'Segoe UI', sans-serif; display: flex; height: 100vh; margin: 0; background: var(--bg); overflow: hidden; }
         
         /* Sidebar */
-        #sidebar { width: 400px; min-width: 320px; background: white; padding: 20px; border-right: 1px solid #dee2e6; overflow-y: auto; height: 100vh; box-sizing: border-box; }
-        #resizer { width: 10px; cursor: col-resize; background: #eee; display: flex; align-items: center; justify-content: center; }
+        #sidebar { width: 350px; min-width: 300px; background: white; padding: 20px; border-right: 1px solid #dee2e6; overflow-y: auto; height: 100vh; box-sizing: border-box; }
+        #resizer { width: 8px; cursor: col-resize; background: #eee; transition: 0.2s; }
         #resizer:hover { background: var(--accent); }
 
         /* Main Workspace */
@@ -20,66 +20,98 @@
         h3 { margin: 0 0 10px 0; font-size: 11px; color: #adb5bd; text-transform: uppercase; letter-spacing: 1.5px; }
         
         select, input, textarea { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
-        button { cursor: pointer; padding: 10px; border: none; border-radius: 6px; font-weight: bold; width: 100%; transition: 0.2s; }
-        .btn-add { background: var(--success); color: white; margin-top: 5px; }
+        button { cursor: pointer; padding: 10px; border: none; border-radius: 6px; font-weight: bold; transition: 0.2s; }
+        .btn-add { background: var(--success); color: white; }
         .btn-primary { background: var(--accent); color: white; }
-        
-        /* Preview Box */
-        #display-box { background: white; border: 1px solid #dee2e6; border-radius: 8px; padding: 30px; flex-grow: 1; overflow-y: auto; white-space: pre-wrap; font-family: 'Georgia', serif; line-height: 1.8; font-size: 1.15em; color: #2c3e50; }
 
-        /* Floating Button */
-        #floating-create-btn { 
-            position: absolute; display: none; background: #e67e22; color: white; 
-            padding: 8px 15px; border-radius: 20px; font-size: 12px; z-index: 100; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2); width: auto; 
+        /* Interactive Highlight Styles */
+        #display-box { 
+            background: white; border: 1px solid #dee2e6; border-radius: 8px; padding: 30px; 
+            flex-grow: 1; overflow-y: auto; font-family: 'Georgia', serif; line-height: 1.8; 
+            font-size: 1.15em; color: #2c3e50; position: relative;
         }
 
-        /* Saved Links Section */
-        #link-list { background: #f1f3f5; padding: 15px; border-radius: 8px; max-height: 200px; overflow-y: auto; border: 1px inset #eee; }
+        /* The visual highlight mark */
+        .temp-highlight {
+            background-color: #fff3bf;
+            border-bottom: 2px solid #fab005;
+            position: relative;
+            padding: 2px 0;
+            border-radius: 3px;
+        }
+
+        /* The "X" delete button on the highlight */
+        .remove-hl {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 14px; height: 14px;
+            background: #ff4757; color: white;
+            font-size: 10px; border-radius: 50%;
+            margin-left: 4px; cursor: pointer;
+            vertical-align: middle;
+            font-family: sans-serif;
+            font-weight: bold;
+            border: none;
+            line-height: 1;
+        }
+
+        /* Create Link Bar */
+        #create-link-bar {
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff9db;
+            border: 1px solid #ffe066;
+        }
+
+        /* Saved Links List */
+        #link-list { background: #f1f3f5; padding: 15px; border-radius: 8px; max-height: 180px; overflow-y: auto; }
         .link-item { background: white; padding: 10px; border-radius: 6px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e9ecef; }
-        .link-info { font-size: 13px; flex-grow: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .link-info a { color: var(--accent); text-decoration: none; font-weight: bold; }
-        .btn-del-link { background: #ff4757; color: white; padding: 5px 10px; width: auto; font-size: 10px; margin-left: 10px; }
+        .link-info a { color: var(--accent); text-decoration: none; font-size: 13px; font-weight: bold; }
+        .btn-del-link { background: #ff4757; color: white; font-size: 10px; padding: 4px 8px; }
     </style>
 </head>
 <body>
 
 <div id="sidebar">
-    <h2 style="margin-top:0; color:var(--primary); font-size: 22px;">AST Admin</h2>
+    <h2 style="margin-top:0; color:var(--primary); font-size: 20px;">AST Admin</h2>
     
     <div class="card">
-        <h3>1. Tier 1: Manage Tests</h3>
-        <input type="text" id="new-test-code" placeholder="New Test Name (e.g., Test 1)">
-        <button class="btn-add" onclick="addTest()">Create Test</button>
-    </div>
-
-    <div class="card">
-        <h3>2. Tier 2: Manage Texts</h3>
-        <label style="font-size:11px">Select Parent Test First:</label>
+        <h3>1. Structure</h3>
+        <input type="text" id="new-test-code" placeholder="New Test (e.g. T1)">
+        <button class="btn-add" style="width:100%" onclick="addTest()">Create Test</button>
+        <hr style="margin:15px 0; border:0; border-top:1px solid #eee;">
         <select id="struct-test-select" onchange="toggleTier2()"></select>
-        <input type="text" id="new-text-code" placeholder="New Text Name (e.g., Text 1)" disabled>
-        <button id="add-text-btn" class="btn-add" onclick="addText()" disabled>Add Text to Test</button>
+        <input type="text" id="new-text-code" placeholder="New Text (e.g. Text 1)" disabled>
+        <button id="add-text-btn" class="btn-add" style="width:100%" onclick="addText()" disabled>Add Text</button>
     </div>
 
     <div class="card">
-        <h3>3. Passage Editor</h3>
+        <h3>2. Content</h3>
         <select id="main-test-select" onchange="syncTexts()"></select>
         <select id="main-text-select" onchange="loadPassage()"></select>
-        <textarea id="passage-input" rows="6" placeholder="Paste passage text here..."></textarea>
-        <button class="btn-primary" onclick="savePassage()">Save Content</button>
+        <textarea id="passage-input" rows="5" placeholder="Paste text..."></textarea>
+        <button class="btn-primary" style="width:100%" onclick="savePassage()">Save Content</button>
     </div>
 </div>
 
 <div id="resizer"></div>
 
 <div id="editor-zone">
-    <button id="floating-create-btn" onclick="saveHighlightedLink()">Create Link for Selection</button>
-    <div id="display-box" onmouseup="handleSelection()">Select a Test and Text to begin. Highlight text here to create a link.</div>
+    <div id="create-link-bar" class="card">
+        <span id="hl-count" style="font-weight: bold; color: var(--warning);">0 items highlighted</span>
+        <button class="btn-primary" onclick="generateMultiLink()">Create Final Link & Save</button>
+    </div>
+
+    <div id="display-box" onmouseup="handleSelection()">
+        Select a Test and Text to begin. Highlight words to start.
+    </div>
     
-    <div class="card" style="margin-bottom: 0;">
-        <h3>4. Saved Links for this Passage</h3>
+    <div class="card" style="margin-bottom:0">
+        <h3>3. Active Links</h3>
         <div id="link-list">
-            <div style="color:#999; font-size: 12px; text-align: center; padding: 10px;">No links found.</div>
+            <div style="color:#999; font-size: 12px; text-align: center;">No links for this text.</div>
         </div>
     </div>
 </div>
@@ -96,55 +128,112 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    let currentSelection = null;
+    let highlights = []; // Current active highlights {start, end, snippet}
 
-    // --- SELECTION LOGIC ---
-    function handleSelection(e) {
+    // --- INTERACTIVE SELECTION ---
+    function handleSelection() {
         const sel = window.getSelection();
         const text = sel.toString().trim();
-        const btn = document.getElementById('floating-create-btn');
+        if (!text || sel.rangeCount === 0) return;
 
-        if (text.length > 0) {
-            const range = sel.getRangeAt(0);
-            const rect = range.getBoundingClientRect();
-            
-            currentSelection = { snippet: text, range: range.cloneRange() };
+        const range = sel.getRangeAt(0);
+        const displayBox = document.getElementById('display-box');
 
-            btn.style.display = 'block';
-            btn.style.top = (rect.top + window.scrollY - 45) + 'px';
-            btn.style.left = (rect.left + window.scrollX) + 'px';
-        } else {
-            btn.style.display = 'none';
+        // Verify selection is inside display-box
+        if (!displayBox.contains(range.commonAncestorContainer)) return;
+
+        // Calculate absolute offsets (stripping existing tags mentally)
+        // We use innerText to get the clean text length before the selection
+        const preRange = range.cloneRange();
+        preRange.selectNodeContents(displayBox);
+        preRange.setEnd(range.startContainer, range.startOffset);
+        const start = preRange.toString().length;
+        const end = start + text.length;
+
+        // Visual confirmation: Wrap the selection in a <mark>
+        const mark = document.createElement('mark');
+        mark.className = 'temp-highlight';
+        mark.dataset.start = start;
+        mark.dataset.end = end;
+        mark.dataset.snippet = text;
+        
+        // Add delete button
+        const delBtn = document.createElement('button');
+        delBtn.className = 'remove-hl';
+        delBtn.innerText = '×';
+        delBtn.onclick = (e) => {
+            e.stopPropagation();
+            removeHighlight(mark);
+        };
+
+        try {
+            range.surroundContents(mark);
+            mark.appendChild(delBtn);
+        } catch(e) {
+            console.warn("Selection spans across existing highlights. Please select clean text.");
+            return;
         }
+
+        sel.removeAllRanges();
+        refreshHighlightState();
     }
 
-    async function saveHighlightedLink() {
+    function removeHighlight(element) {
+        const parent = element.parentNode;
+        while (element.firstChild) {
+            if (element.firstChild.className !== 'remove-hl') {
+                parent.insertBefore(element.firstChild, element);
+            } else {
+                element.removeChild(element.firstChild);
+            }
+        }
+        parent.removeChild(element);
+        parent.normalize(); // Merge text nodes
+        refreshHighlightState();
+    }
+
+    function refreshHighlightState() {
+        const marks = document.querySelectorAll('.temp-highlight');
+        highlights = Array.from(marks).map(m => ({
+            start: parseInt(m.dataset.start),
+            end: parseInt(m.dataset.end),
+            snippet: m.dataset.snippet
+        }));
+        
+        const bar = document.getElementById('create-link-bar');
+        const count = document.getElementById('hl-count');
+        bar.style.display = highlights.length > 0 ? 'flex' : 'none';
+        count.innerText = `${highlights.length} item(s) highlighted`;
+    }
+
+    async function generateMultiLink() {
         const test = document.getElementById('main-test-select').value;
         const text = document.getElementById('main-text-select').value;
-        if (!currentSelection || !test || !text) return;
+        if (highlights.length === 0 || !test || !text) return;
 
-        const displayBox = document.getElementById('display-box');
-        const preRange = currentSelection.range.cloneRange();
-        preRange.selectNodeContents(displayBox);
-        preRange.setEnd(currentSelection.range.startContainer, currentSelection.range.startOffset);
-        
-        const start = preRange.toString().length;
-        const end = start + currentSelection.snippet.length;
         const passageId = `${test}_${text}`;
-        const url = `http://wangzhrm.github.io/ASTeng/highlight?id=${passageId}&s=${start}&e=${end}`;
+        
+        // Sort highlights by start position to keep URL parameters clean
+        highlights.sort((a, b) => a.start - b.start);
+
+        const starts = highlights.map(h => h.start).join(',');
+        const ends = highlights.map(h => h.end).join(',');
+        const combinedSnippet = highlights.map(h => h.snippet.substring(0, 12)).join('.. ');
+
+        const url = `http://wangzhrm.github.io/ASTeng/highlight?id=${passageId}&s=${starts}&e=${ends}`;
 
         await db.collection('links').add({
             passageId: passageId,
-            snippet: currentSelection.snippet.substring(0, 40),
+            snippet: combinedSnippet,
             url: url,
             created: Date.now()
         });
 
-        document.getElementById('floating-create-btn').style.display = 'none';
-        window.getSelection().removeAllRanges();
+        alert("Link Created! You can now clear or refresh.");
+        loadPassage(); // Reset visual state
     }
 
-    // --- DATA LOADING ---
+    // --- DATA HANDLING ---
     function loadPassage() {
         const test = document.getElementById('main-test-select').value;
         const text = document.getElementById('main-text-select').value;
@@ -153,23 +242,23 @@
         const pId = `${test}_${text}`;
         db.collection('passages').doc(pId).get().then(doc => {
             document.getElementById('display-box').innerText = doc.exists ? doc.data().content : "No content.";
+            refreshHighlightState();
         });
 
-        // Fetch links and sort manually to avoid Indexing errors
         db.collection('links').where('passageId', '==', pId).onSnapshot(snap => {
             const list = document.getElementById('link-list');
             if(snap.empty) { list.innerHTML = '<div style="color:#999; text-align:center;">No links saved.</div>'; return; }
             
             let docs = [];
             snap.forEach(doc => docs.push({id: doc.id, ...doc.data()}));
-            docs.sort((a, b) => b.created - a.created); // Newest first
+            docs.sort((a, b) => b.created - a.created);
 
             list.innerHTML = '';
             docs.forEach(d => {
                 list.innerHTML += `
                     <div class="link-item">
                         <div class="link-info"><a href="${d.url}" target="_blank">"${d.snippet}..."</a></div>
-                        <button class="btn-del-link" onclick="deleteLink('${d.id}')">Delete</button>
+                        <button class="btn-del-link" onclick="deleteLink('${d.id}')">Del</button>
                     </div>`;
             });
         });
@@ -177,7 +266,7 @@
 
     function deleteLink(id) { if(confirm("Delete this link?")) db.collection('links').doc(id).delete(); }
 
-    // --- STRUCTURAL BOILERPLATE ---
+    // --- SIDEBAR BOILERPLATE ---
     function toggleTier2() {
         const v = document.getElementById('struct-test-select').value;
         document.getElementById('new-text-code').disabled = !v;
@@ -194,7 +283,7 @@
     }
     db.collection('structure').onSnapshot(snap => {
         const s1 = document.getElementById('struct-test-select'), s2 = document.getElementById('main-test-select');
-        let h = '<option value="">-- Choose Test --</option>';
+        let h = '<option value="">-- Select Test --</option>';
         snap.forEach(doc => h += `<option value="${doc.id}">${doc.id}</option>`);
         s1.innerHTML = h; s2.innerHTML = h;
     });
@@ -202,7 +291,7 @@
         const t = document.getElementById('main-test-select').value;
         const s = document.getElementById('main-text-select');
         db.collection('structure').doc(t).collection('texts').onSnapshot(snap => {
-            s.innerHTML = '<option value="">-- Choose Text --</option>';
+            s.innerHTML = '<option value="">-- Select Text --</option>';
             snap.forEach(doc => s.innerHTML += `<option value="${doc.id}">${doc.id}</option>`);
         });
     }
