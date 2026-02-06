@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AST Admin - Adjustable Workspace</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <style>
+        :root { --primary: #2c3e50; --accent: #3498db; --success: #27ae60; --bg: #f8f9fa; }
+        body { font-family: 'Segoe UI', sans-serif; display: flex; height: 100vh; margin: 0; background: var(--bg); overflow: hidden; }
+        
+        /* Left Sidebar - Scrollable Content */
+        #sidebar { 
+            width: 400px; 
+            min-width: 300px; 
+            background: white; 
+            padding: 20px; 
+            border-right: 1px solid #dee2e6; 
+            overflow-y: auto; 
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* The Resizer Bar */
+        #resizer {
+            width: 8px;
+            cursor: col-resize;
+            background: #eee;
+            transition: background 0.2s;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #resizer:hover { background: var(--accent); }
+        #resizer::after { content: "||"; color: #ccc; font-size: 10px; }
+
+        /* Right Preview Zone */
+        #editor-zone { 
+            flex-grow: 1; 
+            padding: 30px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px; 
+            overflow: hidden; 
+        }
+
+        .card { background: #fff; padding: 20px; border-radius: 10px; border: 1px solid #e9ecef; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        h3 { margin: 0 0 15px 0; font-size: 11px; color: #adb5bd; text-transform: uppercase; letter-spacing: 1.5px; }
+        select, input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; }
+        button { cursor: pointer; padding: 12px; border: none; border-radius: 6px; font-weight: bold; width: 100%; transition: 0.2s; }
+        .btn-add { background: var(--success); color: white; }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-del { background: #ff4757; color: white; margin-top: 10px; font-size: 12px; }
+        button:disabled { background: #dfe4ea !important; cursor: not-allowed; }
+
+        #display-box { 
+            background: white; 
+            border: 1px solid #dee2e6; 
+            border-radius: 8px; 
+            padding: 40px; 
+            flex-grow: 1; 
+            overflow-y: auto; 
+            white-space: pre-wrap; 
+            font-family: 'Georgia', serif; 
+            line-height: 1.8; 
+            font-size: 1.1em; 
+        }
+        .link-result { background: #fff9db; border-left: 5px solid #fcc419; padding: 15px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+<div id="sidebar">
+    <h2 style="margin-top:0; color:var(--primary)">AST Manager</h2>
+    
+    <div class="card">
+        <h3>1. Tier 1 (Tests)</h3>
+        <input type="text" id="new-test-code" placeholder="New Test Name (e.g., Test 1)">
+        <button class="btn-add" onclick="addTest()">Create Test</button>
+    </div>
+
+    <div class="card">
+        <h3>2. Tier 2 (Texts)</h3>
+        <label style="font-size:11px; color:#666">Select Parent Test First:</label>
+        <select id="struct-test-select" onchange="toggleTier2()"></select>
+        <input type="text" id="new-text-code" placeholder="New Text Name (e.g., Text 1)" disabled>
+        <button id="add-text-btn" class="btn-add" onclick="addText()" disabled>Add Text to Test</button>
+        <button class="btn-del" onclick="deleteTest()">Delete Selected Test</button>
+    </div>
+
+    <div class="card">
+        <h3>3. Passage Editor</h3>
+        <select id="main-test-select" onchange="syncTexts()"></select>
+        <select id="main-text-select" onchange="loadPassage()"></select>
+        <textarea id="passage-input" rows="8" placeholder="Paste passage text..."></textarea>
+        <button class="btn-primary" onclick="savePassage()">Save & Refresh Preview</button>
+    </div>
+</div>
+
+<div id="resizer"></div>
+
+<div id="editor-zone">
+    <div id="display-box" onmouseup="generateLink()">Select a Test/Text. Highlight text here to generate link.</div>
+    <div id="link-area"></div>
+</div>
+
+<script>
+    // --- FIREBASE SETUP ---
+    const firebaseConfig = {
+        apiKey: "AIzaSyDQP8wkV6Hu314ajhwcWGfyD8PIeeUh7Zo",
+        authDomain: "ast-eng.firebaseapp.com",
+        projectId: "ast-eng",
+        storageBucket: "ast-eng.firebasestorage.app",
+        messagingSenderId: "476969710355",
+        appId: "1:476969710355:web:d993d06afb8873fbc220e6"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // --- RESIZER LOGIC ---
+    const sidebar = document.getElementById('sidebar');
+    const resizer = document.getElementById('resizer');
+    let isResizing = false;
+
+    resizer.addEventListener('mousedown', (e) => {
+        isResizing = true;
+        document.body.style.cursor = 'col-resize';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (!isResizing) return;
+        let newWidth = e.clientX;
+        if (newWidth > 250 && newWidth < 800) {
+            sidebar.style.width = newWidth + 'px';
+        }
+    });
+
+    document.addEventListener('mouseup', () => {
+        isResizing = false;
+        document.body.style.cursor = 'default';
+    });
+
+    // --- DATABASE LOGIC ---
+    function toggleTier2() {
+        const hasSelection = document.getElementById('struct-test-select').value !== "";
+        document.getElementById('new-text-code').disabled = !hasSelection;
+        document.getElementById('add-text-btn').disabled = !hasSelection;
+    }
+
+    function addTest() {
+        const val = document.getElementById('new-test-code').value.trim();
+        if(val) db.collection('structure').doc(val).set({created: Date.now()});
+        document.getElementById('new-test-code').value = '';
+    }
+
+    function addText() {
+        const parentTest = document.getElementById('struct-test-select').value;
+        const textName = document.getElementById('new-text-code').value.trim();
+        if(parentTest && textName) {
+            db.collection('structure').doc(parentTest).collection('texts').doc(textName).set({name: textName});
+            document.getElementById('new-text-code').value = '';
+        }
+    }
+
+    function deleteTest() {
+        const val = document.getElementById('struct-test-select').value;
+        if(val && confirm(`Delete ${val}?`)) db.collection('structure').doc(val).delete();
+    }
+
+    db.collection('structure').onSnapshot(snap => {
+        const selects = [document.getElementById('struct-test-select'), document.getElementById('main-test-select')];
+        selects.forEach(s => {
+            const current = s.value;
+            s.innerHTML = '<option value="">-- Select Test --</option>';
+            snap.forEach(doc => s.innerHTML += `<option value="${doc.id}">${doc.id}</option>`);
+            s.value = current;
+        });
+    });
+
+    function syncTexts() {
+        const testId = document.getElementById('main-test-select').value;
+        const textSel = document.getElementById('main-text-select');
+        if(!testId) return textSel.innerHTML = "";
+        db.collection('structure').doc(testId).collection('texts').onSnapshot(snap => {
+            textSel.innerHTML = '<option value="">-- Select Text --</option>';
+            snap.forEach(doc => textSel.innerHTML += `<option value="${doc.id}">${doc.id}</option>`);
+        });
+    }
+
+    function savePassage() {
+        const test = document.getElementById('main-test-select').value;
+        const text = document.getElementById('main-text-select').value;
+        const content = document.getElementById('passage-input').value;
+        if(test && text) {
+            db.collection('passages').doc(`${test}_${text}`).set({test, text, content}).then(() => {
+                alert("Saved!");
+                loadPassage();
+            });
+        }
+    }
+
+    function loadPassage() {
+        const test = document.getElementById('main-test-select').value;
+        const text = document.getElementById('main-text-select').value;
+        if(!test || !text) return;
+        db.collection('passages').doc(`${test}_${text}`).get().then(doc => {
+            const content = doc.exists ? doc.data().content : "";
+            document.getElementById('passage-input').value = content;
+            document.getElementById('display-box').innerText = content || "No content found.";
+        });
+    }
+
+    function generateLink() {
+        const sel = window.getSelection();
+        const highlighted = sel.toString().trim();
+        const test = document.getElementById('main-test-select').value;
+        const text = document.getElementById('main-text-select').value;
+        if(!highlighted || !test || !text) return;
+
+        const range = sel.getRangeAt(0);
+        const pre = range.cloneRange();
+        pre.selectNodeContents(document.getElementById('display-box'));
+        pre.setEnd(range.startContainer, range.startOffset);
+        
+        const start = pre.toString().length;
+        const end = start + highlighted.length;
+
+        const baseUrl = window.location.href.replace('creator.html', 'viewer.html');
+        const finalUrl = `${baseUrl}?id=${test}_${text}&s=${start}&e=${end}`;
+
+        document.getElementById('link-area').innerHTML = `
+            <div class="link-result">
+                <strong>Link for ${test} - ${text}:</strong><br>
+                <a href="${finalUrl}" target="_blank">${finalUrl}</a>
+            </div>`;
+    }
+</script>
+</body>
+</html>
