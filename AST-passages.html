@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading Passages Archive</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --bg: #f4f7f6;
+            --text: #333;
+            --sidebar-bg: #fff;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.7;
+            color: var(--text);
+            background-color: var(--bg);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Sticky Tab Header */
+        header {
+            position: sticky;
+            top: 0;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            width: 100%;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            overflow-x: auto;
+        }
+
+        .tab-link {
+            padding: 15px 25px;
+            cursor: pointer;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: bold;
+            color: var(--primary);
+            border-bottom: 3px solid transparent;
+            transition: 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab-link.active {
+            color: var(--accent);
+            border-bottom: 3px solid var(--accent);
+        }
+
+        /* Main Content Container */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .test-section {
+            display: none;
+        }
+
+        .test-section.active {
+            display: block;
+        }
+
+        /* Typography */
+        article {
+            background: white;
+            padding: 40px;
+            margin-bottom: 50px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            scroll-margin-top: 100px; /* Offset for floating header */
+        }
+
+        h1 { font-family: 'Segoe UI', sans-serif; color: var(--primary); margin-top: 0; }
+        h2 { font-family: 'Segoe UI', sans-serif; font-size: 1.8em; margin-bottom: 10px; }
+        .source-meta {
+            display: block;
+            font-family: 'Segoe UI', sans-serif;
+            font-style: italic;
+            color: #7f8c8d;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--accent);
+            padding-left: 15px;
+        }
+
+        p { margin-bottom: 20px; text-align: justify; }
+
+        /* Floating Sidebar Navigation */
+        .quick-links {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--sidebar-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 900;
+        }
+
+        .quick-links a {
+            text-decoration: none;
+            color: var(--primary);
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.85em;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .quick-links a:hover {
+            color: var(--accent);
+            transform: translateX(-5px);
+        }
+
+        @media (max-width: 1200px) {
+            .quick-links {
+                position: static;
+                transform: none;
+                flex-direction: row;
+                justify-content: center;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="tabs">
+        <div class="tab-link active" onclick="showTest('test1')">Test 1</div>
+        <div class="tab-link" onclick="showTest('test2')">Test 2</div>
+        <div class="tab-link" onclick="showTest('test3')">Test 3</div>
+        <div class="tab-link" onclick="showTest('test4')">Test 4</div>
+        <div class="tab-link" onclick="showTest('test5')">Test 5</div>
+        <div class="tab-link" onclick="showTest('test6')">Test 6</div>
+        <div class="tab-link" onclick="showTest('test7')">Test 7</div>
+    </div>
+</header>
+
+
+<div class="container">
+
+    <section id="test1" class="test-section active">
+<div class="quick-links">
+    <div style="font-size: 0.7em; color: #bdc3c7; margin-bottom: 5px;">NAVIGATION</div>
+    <a href="#t1.1">Text 1</a>
+    <a href="#t1.2">Text 2</a>
+    <a href="#t1.3">Text 3</a>
+    <a href="#" style="margin-top:10px; color:#e74c3c;">↑ Top</a>
+</div>
+        <article id="t1.1">
+            <h2>A rising tide</h2>
+            <span class="source-meta">The Economist | October 03, 2020</span>
+            <p>There are some things money can’t buy. Education, however, does not appear to be among them — at least as measured by performance on international exams. On average, pupils in wealthy countries obtain vastly higher test scores than those in developing ones. In turn, strong students tend to become productive workers, making the mostly rich economies they join richer still.</p>
+            <p>The exact mechanism by which knowledge is bought remains unclear. Do students in the rich world fare better because their governments provide superior schools? Or is the reason that they tend to have richer parents, and enjoy more educational resources at home? A new working paper by Dev Patel of Harvard University and Justin Sandefur of the Centre for Global Development offers strong evidence that the wealth of a country affects exam results just as much as the wealth of a pupil’s household does.</p>
+            <p>Evaluating test scores around the world is harder than it sounds. Although pupils in the rich world mostly take one of a few big international exams, many developing countries rely on regional tests. This precludes apples-to-apples comparisons</p>
+	<p>The authors surmounted this obstacle by fielding an exam in 2016 for 2,314 children in Bihar, in northern India. It included both questions from the leading tests and ones taken from smaller exams. Using answers from the same pupils on the same day to questions from different tests, they built a statistical model they called a “Rosetta Stone”. It can translate scores from a range of exams — such as one used solely in west Africa — into an equivalent mark on other common international tests.</p>
+            <p>Messrs Patel and Sandefur then used these equations to estimate how pupils in 80 different countries would fare on the benchmark Trends in International Mathematics and Science Study (TIMSS). Their data show that the wealth of a student’s country and family has similar impacts on test scores — meaning that big gaps in GDP per person matter more than small ones in household income do. For example, pupils from families that are very poor by rich-world standards — those earning $5,000 a year (measured in 2005 dollars) — were expected to score around 500 out of 1,000 on the TIMSS in America, and 560 in Japan. In contrast, those whose parents make $10,000 a year in an upper-middle income country, such as Costa Rica, still manage only the equivalent of a 475.</p>
+<p>The study also found that the influence of parental earnings is not constant. Instead, an extra $1,000 in family income “buys” a larger increase in test scores in highly unequal countries than it does in ones that split their economic pie more evenly. One possible reason is that elites tend to educate their children privately in places where wealth is concentrated, such as Brazil. In contrast, in countries with relatively flat income distributions, like Croatia or Armenia, pupils from different social classes are more likely to attend the same schools. This could reduce the impact of family wealth on test scores.</p>
+        </article>
+
+        <article id="t1.2">
+            <h2>Vast sums are wasted on back pain</h2>
+            <span class="source-meta">The Economist | January 18, 2020</span>
+            <p>For some people it starts with an injury: a skiing accident or a car crash. For others it starts with something seemingly innocuous, like picking up a pair of socks from the floor. But for most, back pain is as mysterious as it is excruciating.</p>
+<p>Some 85% of chronic sufferers have what doctors call “non-specific” back pain, meaning it has no clear physical cause.</p>
+<p>In most countries, back pain is the leading cause of disability, measured by the number of years lived in poor health. It often strikes people in middle age and keeps them wincing, on and off, for the rest of their lives. Many lose their jobs, either because they feel physically unable to work or because they become depressed. Back pain is the main reason why Europeans drop out of work and a big reason why Americans get hooked on opioids.
+The problem is not that back pain is undertreated. Far from it. Americans spend $88 bn a year to treat back and neck pain. Add lost productivity to the medical bills, and chronic pain costs America an estimated $635 bn a year — only a bit less than its defense budget. The scandal is that the treatments offered are mostly the wrong ones.</p>
+<p>Doctors in rich countries are far too quick to prescribe addictive painkillers — a practice that is now spreading to the developing world. They are also too quick to offer magnetic resonance imaging (MRI) scans. In rich countries perhaps 80% of MRIs for back pain are unnecessary. The scans often find an “abnormality”. These are common even in people who do not suffer back pain, but desperate patients often demand swift intervention to “fix” the “problem”. Surgery with unproven benefits, or which has been shown not to work, is common. Cigna, an American insurer, found that 87% of customers who had spinal fusion surgery for wear and tear of spinal discs were still in so much pain two years later that they needed more treatment. And spinal injections, another treatment, often do little good.</p>
+            <p>For most back pain, the best treatment is nonmedical. Do some stretching exercises. Keep moving. Don’t give up work or lie in bed for days on end — that will probably make things worse. Above all, be patient. The problem may not be your back; it may be that the brain’s pain-signalling system is not working properly. The pain may be partly psychosomatic. The stress of a bad marriage or a sick kid may bring it on. People who suffer mental trauma when young are more likely to experience back pain in middle age. In many cases, the right exercises and the passage of time can ease the pain. And unlike surgery, they cost very little and are unlikely to make things worse.</p>
+            <p>FHealth systems get back pain wrong for several reasons. People who are in agony unsurprisingly want something to be done about it. It is easier for a doctor to prescribe painkillers, scans or injections than to explain to patients that such treatments are unlikely to work. Doctors and hospitals are often paid more for doing things than for giving advice. In America, insurers pay for back operations costing tens of thousands of dollars, but barely cover physiotherapy.</p>
+<p>The answer is to educate patients better, so they don’t feel they are being fobbed off when told to do stretching exercises. Doctors need better training, too. More research is needed into the effectiveness of surgery. But most of all, governments and insurers need to start paying for the right things. This will be hard. Costly interventions have a powerful lobby, and there is no exercise-industrial complex to counterbalance it. With luck, more effective treatments for back pain may be developed in the coming years. But for now, policy makers should show some spine and turn their backs on treatments that don’t work.</p>
+        </article>
+
+        <article id="t1.3">
+            <h2>Why Norway became a nation of electric car lovers</h2>
+            <span class="source-meta">The Guardian | January 09, 2021</span>
+            <p>Norway last year became the first country to sell more electric cars than petrol, hybrid and diesel engines put together, with battery electric vehicles (BEVs) accounting for two thirds of sales in the final months of 2020. The country has planned to phase out sales of all new fossil-fuel vehicles by 2025, five years earlier than the UK.</p>
+            <p>It is quite a contradiction in a nation that has become one of the richest in the world per capita on the back of its oil and gas revenues, has made itself completely financially dependent on oil, and clings to further production even as the world increasingly rejects fossil fuels in the pursuit of zero emissions./p>
+            <p>While the government is on the one hand auctioning oil exploration licences for fields in the fragile Arctic, on the other hand it is aiming for a completely carbon-neutral national vehicle park by 2030. Yesterday, it submitted its national plan on climate. From next year, the public sector will be required to procure zero-emission vehicles only.</p>
+<p>Although Norway is still one of the world’s major oil producers, it gets more than 90% of its domestic power from hydroelectric sources, which goes some way to explain why the introduction of electric vehicles has been such a winner: as long as the rivers and waterfalls don’t run dry, this is a seemingly endless source of power. Christina Bu, head of the Norwegian Electric Vehicle Association, said that behind the success lies a long-term political strategy. “One might assume this is all about subsidies. It is not. It’s all about taxing what we don’t want and promoting what we do want.”</p>
+<p>Norway has some of the highest taxes in the world on what are regarded as luxury goods, including cars. So reducing taxes on vehicles, together with numerous incentives, was bound to entice car buyers.</p>
+<p>The incentives and exemptions include no vehicle purchase tax on electric cars (a big levy which helps push up the average price for a vehicle in Norway to £43,000–£46,000, compared with an EU average of £6,000–£29,000); no VAT (usually 25%); zero road tax; free parking in some municipal car parks; reduced tax on company electric cars (at a lower rate than fossil-fuel vehicles); reduced or free tolls in some areas; driving in a bus lane if carrying a passenger; 50% discounts in car parks, on tolls and on ferries.</p>
+<p>The ambitious political strategy goes back to the late 1990s, when it was introduced to stimulate production of Norwegian electric cars and to reduce emissions.</p>
+<p>It hasn’t entirely worked out that way. Norwegian-produced BEVs are still noticeable by their absence. But the number of electric cars sold has soared, from 3% of total sales in 2012, to 54%. “Norway has certainly paved the way for the industry,” said Per Espen Stoknes, who is an MP for the Green Party.</p>
+<p>Stoknes described the process of expanding the national BEV park as “a green tax shift”, which he thinks any country could afford if they focused on the right things. As a psychologist, he also emphasizes the power of social pressure, in particular in densely populated cities.</p>
+<p>“We have been able to prove statistically that there is a keeping-up-with-the-Joneses effect. That is to say, if someone in a street buys a BEV, the neighbors are more likely to follow suit. It can turn into a greener-than-thou competition in which envy, as always, is a powerful driving force.”</p>
+<p>As in the UK, the big challenge is the installation of charging points around the country. There are currently 3,200 rapid charge points, run by about 10 companies, which are working to develop ever faster chargers.</p>
+<p>Right now, there are still problems, particularly on the busiest travel days, when BEV drivers facing long queues and chargers that are out of commission. Bu said: “We have to constantly encourage the development of further and more reliable chargers.”</p>
+<p>The more electric cars sold, the harder it is for critics of the vehicles to be heard. However, although BEVs are environmentally friendly in a local context, they still leave big climate footprints globally. The manufacture of BEV batteries requires expensive and rare metals, while the secure disposal of used and broken batteries is a growing problem, and both concerns are conveniently palmed off on poor, vulnerable countries — such as the Democratic Republic of the Congo, which produces 60% of the world’s cobalt — that lack the legislation to deal with them.</p>
+        </article>
+    </section>
+
+    <section id="test2" class="test-section">
+<div class="quick-links">
+    <div style="font-size: 0.7em; color: #bdc3c7; margin-bottom: 5px;">NAVIGATION</div>
+    <a href="#t2.1">Text 1</a>
+    <a href="#t2.2">Text 2</a>
+    <a href="#t2.3">Text 3</a>
+    <a href="#" style="margin-top:10px; color:#e74c3c;">↑ Top</a>
+</div>
+        <article id="t2.1">
+            <h2>The meat spots</h2>
+            <span class="source-meta">The Economist | January 18, 2020</span>
+            <p>Tanaka Kane is one of humanity’s great outliers. On January 2nd she became the third person ever to turn 118, according to the Gerontology Research Group, a team of academics. She is also the first citizen of Japan to reach 118 — but is unlikely to be the last. The country has the world’s longest life expectancy, and 80,000 centenarians.</p>
+            <p>Mrs. Tanaka is an outlier for another reason, too. She claims to love chocolate and fizzy drinks, setting her apart from most of her compatriots. Japan has long had one of the lowest sugar consumption rates in the Organization of Economic Cooperation and Development (OECD).</p>
+<p>The unusual longevity enjoyed in Japan is often credited to diet. Yet the idea that the country has extended lifespans by entirely avoiding the West’s sinful culinary delights may be too simple. In fact, recent studies imply that one key to its success may be that its people’s diets have shifted over time towards Western eating patterns.</p>
+<p>Japan was not always a longevity champion. In 1970, its age-adjusted mortality rates were average for the OECD. Although its levels of cancer and heart disease were relatively low, it also had the OECD’s highest frequency of cerebrovascular deaths, caused by blood failing to reach the brain.</p>
+<p>Between 1970 and 1990, however, Japan’s cerebrovascular mortality rate fell towards the OECD average. With world-beating numbers on heart disease and fewer strokes, Japan soared up the longevity league table.</p>
+<p>How did Japan overcome its cerebrovascular woes? Some of its gains simply mirror better treatments and reductions in blood pressure around the world, notes Thomas Truelsen of the University of Copenhagen.</p>
+<p>However, another cause may be diets. Japan largely banned meat for 1,200 years, and still consumes relatively little meat and dairy. Too much of these can be damaging, since they contain saturated fatty acids, which correlate to heart disease. Studies have also tied eating lots of processed red meat to a greater risk of stroke. But too little may be unwise as well, because they provide cholesterol that may be needed for blood vessel walls. In a study of 48,000 Britons, vegetarians were unusually resistant to heart disease, but prone to strokes.</p>
+<p>In theory, a dearth of animal-based food could have contributed to Japan’s historical cerebrovascular mortality. In 1960–2013, as the country’s deaths from strokes tumbled, its annual meat intake rose from near zero to 52kg per person (45% of America’s level). Tsugane Shoichiro of the National Cancer Centre in Tokyo says that his compatriots may need meat and dairy to keep their blood vessels robust — though not so much that those vessels get clogged.</p>
+<p>Some empirical evidence supports this view. One paper from the 1990s found that the parts of Japan where diets had changed most also had the biggest drops in cerebrovascular mortality. Another study, which tracked 80,000 Japanese people in 1995–2009, showed that strokes were most common among those who ate the least chops and cream. Although Japan’s decline in cerebrovascular deaths could stem entirely from other causes, these data suggest that nutritional shifts may have helped.</p>
+<p>The unhappy irony is that Japan’s health gains, paired with a low birth rate, threaten its economy. By 2060, 40% of Japanese could be 60 or older. That would yield more birthday cakes with 118 candles — and fewer great-grandchildren to blow them out.</p>
+        </article>
+        <article id="t2.2">
+            <h2>The dignity of all the talents</h2>
+            <span class="source-meta">The Economist | January 11, 2020</span>
+            <p>Stuyvesant High School is considered the crown jewel of the public schools in New York City, admitting pupils on the basis of a single, high-stakes exam. To some, that seems the meritocratic ideal. To others, it yields alarming results. Of the 895 places available last year, only seven were offered to black pupils while Asian-Americans are 73% of the school population.</p>
+
+<p>The debate over whether education of gifted children segregates them on the basis of pre-existing privilege rather than cognitive ability is neither new nor uniquely American. The three-tiered German education system — which sorts children on the basis of ability at the age of ten into either university-preparatory schools or vocational ones — has always been criticized for fostering social segregation.</p>
+
+<p>The most recent statistics show that whites are 80% more likely than black students to take part in programmes for the gifted, and Asians are three times as likely. But the principal battleground has been New York City.</p>
+
+<p>Much of that is due to Bill de Blasio, who has staked his administration on the promise of reducing inequality. Though the policy has not yet been implemented, it triggered a fury among parents, particularly Asian-Americans, fearful that their children’s chance of a fine education was to be sacrificed on the altar of diversity.</p>
+
+<p>Choice beyond a possibly poor neighbourhood public school is constrained both by geography and by financing. New York has exceptionally good private schools, available at exceptionally high prices. Charter schools, publicly funded but privately run, provide choices for the masses. Often, they draw poorer pupils from local schools. Some of the city’s highest-performing charter schools draw bids from the ranks of middle-class parents as well.</p>
+
+<p>The programmes for gifted children offered by the city foster extreme competition both because they give some reassurance of a free, high-quality education and because space is extremely limited. Only 6% of high-school pupils attend one of the eight sought-after specialized high schools. Because admissions are based on high-stakes tests, concerned families spend big sums on test preparation.</p>
+
+<p>Some advocates yearn for an egalitarian model like Finland’s — where comprehensive schools and a focus on special education (or disabilities) rather than giftedness coincide with high rankings on international measures such as pisa scores. But even in Finland, more than 10% of upper-secondary schools (those before university) are specialized. Other attributes, such as high education spending and extreme selectivity of applicants to become teachers (only 10% make it), are probably also critical to the education system’s success.</p>
+
+<p>No doubt the system in America could be improved. It seems unlikely that gifted children can reliably be spotted at the age of four on the basis of a standardized test. More places would help deescalate the test-prep arms race. So too would giving the screening test to all pupils, rather than just to those who opt in. Implementation of such a policy in Broward County, Florida doubled the number of Hispanic and black children in programmes for the gifted.</p>
+
+<p>Mr. de Blasio suggested abandoning the entrance test and admitting the top 7% of students from each middle school to specialized schools. One problem is that at some middle schools this would include students who had not passed the state maths exam. This infuriated many Asian parents, who do not see why their children should be punished for studying hard.</p>
+
+<p>Children from poor homes have problems that need to be tackled. A good education system should be as capable of delivering remedial instruction as education for the gifted. Segregating pupils in schools of high poverty, with few additional resources, is a recipe for stagnation. The aim of integration should be to eliminate such schools, but perhaps not to dismantle upper-tier courses. The fear that this might trigger white or middle-class flight from public schools may be overblown.</p>
+        </article>
+        <article id="t2.3">
+            <h2>A climate call to arms</h2>
+            <span class="source-meta">New Scientist | February 20, 2021</span>
+            <p>“I am aware that I am an imperfect messenger on climate change,” writes Bill Gates in his latest book, How to Avoid a Climate Disaster, which spells out why he thinks the world can get to zero greenhouse gas emissions by 2050.</p>
+
+<p>The philanthropist and Microsoft co-founder is, by his own admission, incredibly rich, wedded to techno-fixes and has a big carbon footprint. The latter extends to a troubling failure to walk the talk, with Gates revealing in the book that he flew to the 2015 Paris climate summit by private jet.</p>
+
+<p>On the other hand, he has an eye for detail, a skill and talent for explaining complex issues simply and an attractively unabashed interest in fertilizer depots and power stations. Moreover, his foundation’s work on issues including health and poverty across the globe has given him a better awareness than many writers of how a carbon fix that works for the US may not work for India. And unlike some climate books absorbed in just science or politics or business, he looks across all the sectors needed to eliminate humanity’s annual output of 51 gigatonnes of greenhouse gases.</p>
+
+<p>Dense with numbers and facts and peppered with charts and tables, it is clear that Gates would like this book to be the climate solution equivalent of the late Hans Rosling’s Factfulness, an excellent dissection of distorted perceptions of the state of the world. “When we have a fact-based view of climate, we can see that we have some of the things we need to avoid a climate disaster, but not all of them,” Gates writes.</p>
+
+<p>For the most part, he succeeds. Gates is strong on why it will be so hard to get to zero emissions — not least the inaction in the energy industry that he identifies — and explaining how much more there is to do beyond generating more solar power and making more electric cars. Pages on the inherently carbon-intensive process of making stuff that underpins the modern world, especially concrete and steel, are clear-eyed and well done.</p>
+
+<p>You might not have expected it from a former software engineer, but Gates can write. Personal experience is mixed with a refreshing honesty about how hard decarbonising the world will be.</p>
+
+<p>Nice prose would be meaningless if his solutions were wrong. Happily, he gets the big stuff right: generating loads more clean electricity, electrifying everything we possibly can and spending loads more on R&D to sort the rest (aviation, shipping, heavy industry). He is also good on the dull but vital detail of policy to make it all happen.</p>
+
+<p>Gates is less strong when it comes to the role of food and land use. While overly optimistic about technologies that haven’t been cracked, including nuclear fusion, he is unnecessarily pessimistic about things that evidence shows can be done, like eating less meat.</p>
+
+<p>On this, he says that, for cultural reasons, “I just don’t think it’s realistic”. Yet the trend to less consumption of animal products is underway in some countries. The UK government’s sober climate advisers want and think it is realistic for people to eat at least a fifth less meat and dairy by 2050.</p>
+
+<p>Other weak spots include an almost unquestioning enthusiasm for nuclear power, with scant paragraphs on the high costs holding it back and its intractable waste problem. In contrast, there are a great number of pages on the challenge of intermittency posed by renewables, which is real but overblown here. The pandemic’s climate consequences are alluded to, but not in any depth, which is a shame. And carbon emission removal options are only briefly touched on.</p>
+
+<p>Still, these are minor flaws. How to Avoid a Climate Disaster is clear, concise on a colossal subject and intelligently comprehensive in its approach to the problem. Gates may not be the perfect messenger on this issue, but he has written a fine primer on how to get ourselves out of this mess.</p>
+        </article>
+    </section>
+
+    <section id="test3" class="test-section">
+<div class="quick-links">
+    <div style="font-size: 0.7em; color: #bdc3c7; margin-bottom: 5px;">NAVIGATION</div>
+    <a href="#t3.1">Text 1</a>
+    <a href="#t3.2">Text 2</a>
+    <a href="#t3.3">Text 3</a>
+    <a href="#" style="margin-top:10px; color:#e74c3c;">↑ Top</a>
+</div>
+        <article id="t3.1">
+            <h2>Noblesse oblige</h2>
+            <span class="source-meta">The Economist | October 09, 2021</span>
+            <p>The Nobel prizes, whose winners are announced this month, may be the world’s most coveted awards. As soon as a new crop of laureates is named, critics start comparing the victors’ achievements with those of previous winners, reigniting debates over past snubs.</p>
+
+<p>A full account of why, say, Stephen Hawking was passed over will have to wait until 2068: the Nobel Foundation’s rules prevent disclosure about the selection process for 50 years. But once this statute of limitations ends, the foundation reveals who offered nominations, and whom they endorsed. Its data start in 1901 and end in 1953 for medicine; 1966 for physics, chemistry and literature; and 1967 for peace. (The economics prize was first awarded in 1969.)</p>
+
+<p>Nomination lists do not explain omissions like Leo Tolstoy (who got 19 nominations) or Mahatma Gandhi (who got 12). But they do show that in 1901–66, Nobel voters handed out awards more in the style of a private members’ club than of a survey of expert opinion. Whereas candidates with lots of nominations often fell short, those with the right backers — like Albert Einstein or other laureates — fared better.</p>
+
+<p>The bar to a Nobel nomination is low. For the peace prize, public officials, jurists and the like submit names to a committee, chosen by Norway’s parliament, that picks the winner. For the others, Swedish academies solicit names from thousands of people, mostly professors, and hold a vote for the laureate. On average, 55 nominations per year were filed for each prize in 1901–66.</p>
+
+<p>Historically, voters paid little heed to consensus among nominators. In literature and medicine, the candidate with the most nominations won just 11% and 12% of the time; in peace and chemistry, the rates were 23% and 26%. Only in physics, at 42%, did nomination leaders have a big advantage. In 1956 Ramón Menéndez Pidal, a linguist and historian, got 60% of nominations for the literature prize, but still lost.</p>
+
+<p>However, voters did make one group of nominators happy: current and future laureates. Candidates put forward by past victors went on to win at some point in the future 40% more often than did those whose nominators never won a Nobel. People whose nominators became laureates later on also won unusually often. This implies that being accomplished enough to merit future Nobel consideration was sufficient to gain extra influence over voters.</p>
+
+<p>In theory, this imbalance could simply reflect laureates nominating stronger candidates. However, at least one Nobel winner seems to have boosted his nominees’ chances, rather than merely naming superstars who would have won anyway.</p>
+
+<p>According to the Nobel Foundation’s online archive, all 11 of Einstein’s nominees won a prize. Some were already famous, like Max Planck; others, like Walther Bothe, were lesser known. In two cases, his support seems to have been decisive.</p>
+
+<p>In 1940, Einstein supported Otto Stern, a physicist who had already had 60 nominations. Stern won the next time the prize was given. Similarly, Wolfgang Pauli, whose “exclusion principle” is central to quantum mechanics, had received 20 nominations before Einstein backed him in 1945. He got his prize that same year.</p>
+        </article>
+        <article id="t3.2">
+            <h2>AI for all</h2>
+            <span class="source-meta">New Scientist | December 04, 2021</span>
+            <<p>Nearly 200 countries have signed UNESCO’s agreement on AI ethics. This could help make the technology fairer for everyone, says Gabriela Ramos.</p>
+
+<p>Artificial intelligence is more present in our lives than ever: it predicts what we want to say in emails, helps us navigate and improves our weather reports. But the technology isn’t always beneficial. The data sets used to build AI often aren’t representative of the diversity of the population, so it can result in discriminatory practices or biases.</p>
+
+<p>One example is face-recognition technology. This is used to access our mobile phones, bank accounts and apartment buildings, and is increasingly employed by police forces. But it can have problems accurately identifying women and black people.</p>
+
+<p>For three such programs released by major tech companies, the error rate was only 1 percent for light-skinned men, but 19 percent for dark-skinned men and up to a staggering 35 percent for dark-skinned women. Biases in face-recognition technologies have led to wrongful arrests.</p>
+
+<p>This is no surprise when you look at how AI is developed. Only 1 in 10 software developers worldwide are women and only 3 percent of employees at the top 75 tech companies in the US identify as black. But now there is hope that the world is about to pivot to a much better approach.</p>
+
+<p>Last week at UNESCO, 193 countries reached a groundbreaking agreement on how AI should be designed and used by governments and tech companies. UNESCO’s Recommendation on the Ethics of Artificial Intelligence took two years to put together and involved thousands of online consultations with people from a diverse range of social groups. It aims to fundamentally shift the balance of power between ordinary people and the businesses and governments developing AI.</p>
+
+<p>Countries have agreed to implement this recommendation by enacting legislation to regulate the design and deployment of AI. This means they must use affirmative action to make sure women and minority groups are fairly represented on AI design teams. Such action could take the form of quota systems that ensure these teams are diverse.</p>
+
+<p>Another important principle countries have agreed to is banning mass surveillance and other invasive technologies that breach fundamental freedoms. Of course, we don’t expect a complete withdrawal of CCTV everywhere, but we do expect such mass surveillance to be limited to uses that comply with human rights. UNESCO will use “peer pressure” to enforce global norms.</p>
+
+<p>In the coming months, UNESCO experts will work to create a set of monitoring tools, ensuring that the development and deployment of AI complies with human rights, but doesn’t stifle innovation. This will be a difficult balance to achieve and will require the full commitment of the scientific community.</p>
+
+<p>The new agreement is broad and ambitious. It addresses online bullying and hate speech, and obliges countries to lower their carbon footprint from tech — the amount of energy used to store our data has risen significantly since AI innovation began to expand.</p>
+
+<p>UNESCO now expects two things to happen. Firstly, governments and companies will voluntarily begin to make their AI systems comply with the principles laid out in the recommendation — similar moves happened after UNESCO’s declaration on the human genome set out norms for genetic research. Secondly, governments will begin to legislate using the recommendation as a manual. Countries will be obliged to report on the progress of their legislation and UNESCO will monitor this.</p>
+
+<p>With this agreement, we are confident in putting AI to work where it can have the most impact on the world’s greatest challenges. We are optimistic we have built the momentum for real change.</p>
+        </article>
+        <article id="t3.3">
+            <h2>Can you hear me?</h2>
+            <span class="source-meta">The Guardian | December 11, 2021</span>
+            <p>For quite a loud woman, it’s amazing how hard Judith Howell had to work to get heard. Howell, 49, used to be a government lobbyist, and she noticed a well-known phenomenon: “It’s incredibly male-dominated, and I’d find that if I said something it would get picked up by someone else in the meeting as if they’d said it. So I’d have to push a bit harder, literally interrupt and — not shout, but raise my voice. And some people found that very annoying.”</p>
+
+<p>In a career that required the ability to make a case as forcefully as possible, she didn’t see anything wrong with it. But sometimes she would be taken aside and told she was overconfident. “And I’d think — I’m literally doing the same thing as the men.” For women such as Howell, who know that they are loud because they are passionate or confident, being asked to be quiet is more than just a sexist insult.</p>
+
+<p>To Sara, an academic in Leeds, the story is all too resonant: in anonymous feedback from her lectures students have complained that she’s “too loud”. “I felt a bit embarrassed when I first read it,” she says. “But then I also felt a bit indignant! It’s one of the comments that’s stuck with me despite my best efforts. I do often wonder if I’m being too loud in a class, but then usually only in retrospect. When I’m in the middle of teaching, it doesn’t cross my mind.”</p>
+
+<p>She has never heard of a male colleague getting similar feedback. She notices something similar among her students, where the men are “consistently louder” and women are “constantly railroaded”, something she tries to mitigate.</p>
+
+<p>It is striking to think about the celebrities who are seen as loud — and reflect that whereas for Brian Blessed or Dom Joly, it is largely viewed as entertainment, women like Margaret Thatcher and Angela Rayner are routinely seen as strident or difficult.</p>
+
+<p>Sonia Mortlock’s experience suggests horror at a loud woman can be multiplied when race is also a factor. Mortlock is of Jamaican heritage, and says that in her former job at a housing association she endured “frequent comments about the tone and volume of my voice, even when I thought I was being perfectly respectful and polite”.</p>
+
+<p>“I do have a loud voice,” she says. “But I’m not rude. People said I had an aggressive attitude.” She would see white men “literally shouting in meetings and nothing would happen”, she adds.</p>
+
+<p>Eventually, she lost her job because she didn’t want to move from a four-day to a five-day week. She brought an unfair dismissal claim. “The judge was very quiet, and when I spoke he told me he wouldn’t tolerate raised voices. But again, I was just speaking in my normal voice.” That was when she knew she would lose.</p>
+
+<p>To Emma Wainer, a corporate speaking coach who runs an “Influential Leadership for Women” coaching programme, these are familiar stories. “Women in the workplace have two spaces available to them — the kind, appeasing, gentle woman, and the absolute bitch.” They don’t even have to be especially noisy, she notes. “If women use more masculine turns of phrase, more direct language, shorter sentences, gesture, and if they combine that with a higher pitch, they will be labelled as difficult.”</p>
+
+<p>If it isn’t always easy to adapt how we speak, that may be because the factors that make a person loud are deeply embedded. “Nature is a part of it — if we take voice pitch as an analogue for this, it can be affected by body size, hormones, gender differentiation,” says Mark Huckvale, professor of speech science at University College London. “But that’s a small component compared to the nurture side of it. It varies across cultures, and people’s positions within society, and whether we’re expected to be submissive or dominant.”</p>
+
+<p>Howell, for her part, did try to be quieter — and more “appropriate” — at work. “And I ended up incredibly depressed, because I simply wasn’t being me. I’ve spent decades creating this professional self, and all of a sudden it’s gone.” She ended up leaving her lobbying job and becoming a gardener. “It’s lovely,” she says. “The plants don’t mind, and they don’t talk back.”</p>
+        </article>
+    </section>
+
+    <section id="test4" class="test-section">
+<div class="quick-links">
+    <div style="font-size: 0.7em; color: #bdc3c7; margin-bottom: 5px;">NAVIGATION</div>
+    <a href="#t4.1">Text 1</a>
+    <a href="#t4.2">Text 2</a>
+    <a href="#t4.3">Text 3</a>
+    <a href="#" style="margin-top:10px; color:#e74c3c;">↑ Top</a>
+</div>
+        <article id="t4.1">
+            <h2>Green goals</h2>
+            <span class="source-meta">The Economist | August 07, 2021</span>
+            <p>New climate announcements are coming thick and fast. In recent weeks dozens of countries, including Nigeria and Malaysia, updated the mitigation plans known as “nationally determined contributions” (NDCs) required under the Paris climate agreement of 2015. The deal obliges its signatories to increase the ambition of their NDCs every five years. The original deadline for the first round of updates was COP26, the UN climate summit in Glasgow in 2020. However, because of the pandemic, the great start was delayed until October this year. So far, 58% of the 191 signatories have submitted new NDCs.</p>
+
+<p>Countries’ climate targets come in many shapes and sizes. Around two-thirds of the global economy is now covered by a pledge to achieve “net-zero” emissions by around mid-century. The array of different benchmarks and definitions can obscure how ambitious each country actually plans to be. To obtain a clearer picture, The Economist has analyzed data from Climate Action Tracker, a research group.</p>
+
+<p>The world’s 20 biggest polluters account for four-fifths of global emissions. About half of them have climate targets that provide for their emissions to grow over the next decade — all of those are emerging economies. Their justification is that the West was allowed to spew greenhouse gases as it grew rich and that they have the right to do so, too.</p>
+
+<p>Offering relative pledges connected to the intensity of future pollution, or measured against scenarios without any reductions, is a popular way to conceal insufficient green ambitions and continue polluting. Adjusting statistics is another.</p>
+
+<p>Another type of climate goal involves promising to cut emissions compared with a business-as-usual scenario. Pakistan pledges a cut of 20% by 2030, compared with a pathway where no climate action is taken whatsoever. Yet this goal means its emissions could surge threefold by 2030.</p>
+
+<p>Fiddling with baselines is another wheeze. Brazil submitted its updated NDCs in December. A major percentage in the pledge was the same: a reduction of 43% below 2005 levels by 2030. But tweaks to its carbon accounting meant the level of emissions booked in 2005 increased from the equivalent of 2.1 bn tonnes of carbon dioxide to 2.8 bn tonnes. As a result, the amount Brazil can emit in 2030 has risen by about a third.</p>
+
+<p>Rebasing climate targets changes the relative ambition of rich countries, too. On the face of it, the European Union’s target of lowering emissions by 55% by 2030 is more ambitious than America’s 52% cut. But the EU’s goal is based on 1990 levels and its emissions have already fallen from that point. By contrast, America’s plan is based on 2005 levels, and its emissions have fallen by less since. Once put on the same basis, America’s goal appears more worthy of praise.</p>
+
+<p>Rich countries should not feel self-satisfied about their efforts, however. If Brazil’s emissions rise in line with its pledge and America’s fall to meet its goal, by 2030 the average carbon footprint of an American will still be twice as large as that of a Brazilian. Not enough is being done to combat climate change in either the rich world or in emerging markets.</p>
+        </article>
+        <article id="t4.2">
+            <h2>The shortage economy</h2>
+            <span class="source-meta">The Economist | October 09, 2021</span>
+            <p>For a decade after the financial crisis the world economy’s problem was a lack of spending. Worried households paid down their debts, governments imposed austerity and cautious firms held back investment. Now spending has come roaring back, as governments have stimulated the economy and consumers let rip. The surge in demand is so powerful that supply is struggling to keep up. As rising inflation scares investors, the gluts of the 2010s have given way to a shortage economy.</p><p>The immediate cause is the pandemic. $10.4$ trn of global stimulus has unleashed a furious rebound in which consumers are spending more on goods than normal. A shortage of the microchips has struck electronic production. The spread of the Delta variant has shut down clothing factories in Asia. In the rich world migration is down, stimulus has filled bank accounts and not enough workers fancy shifting from out-of-favour jobs like selling sandwiches in cities to in-demand ones such as warehousing.</p><p>Yet the shortage economy is also the product of two deeper forces. First, decarbonisation. The switch from coal to renewable energy has left Europe vulnerable to a natural-gas supply panic that at one point this week had sent spot prices up by over 60%. A rising carbon price in the European Union’s emissions-trading scheme has made it hard to switch to other dirty forms of energy.</p><p>The second force is protectionism. Trade policy is no longer written with economic efficiency in mind, but in the pursuit of imposing labour and environmental standards abroad. Global economic nationalism is contributing to the shortage economy. Britain’s lack of lorry drivers has been exacerbated by Britain’s exit from the EU. After years of trade tensions, the flow of cross-border investment by companies has fallen by more than half relative to world GDP since 2015.</p><p>All this might remind people of the 1970s, when many places faced petrol station queues, double-digit price rises and sluggish growth. But the comparison gets you only so far. Half a century ago politicians got economic policy badly wrong, fighting inflation with futile measures like price controls and Gerald Ford’s “whip inflation now” campaign, which urged people to grow their own vegetables. Today the Federal Reserve is debating how to forecast inflation, but there is a consensus that central banks have the power and the duty to keep it in check.</p><p>For now, out-of-control inflation seems unlikely. Energy prices should ease after the winter. In the next year the spread of vaccines and new treatments for the pandemic should reduce disruptions. Consumers may spend more on services. Fiscal stimulus will wind down in 2022: the US president is struggling to get his immense spending bills through Congress and Britain plans to raise taxes. And an investment boost in some industries will eventually translate into more capacity and higher productivity.</p>Shutterstock<p>But the deeper forces behind the shortage economy are not going away and politicians could easily end up with dangerously wrong-headed policies. One day, technologies such as hydrogen should help make green power more reliable. But that will not compensate for shortages right now. If governments do not ensure there are adequate green alternatives to fossil fuels, they may have to meet shortages by relaxing emissions targets and returning to dirtier sources of energy. Governments will therefore have to carefully cope with the higher energy costs and slower growth that will result from eliminating emissions. Pretending that decarbonisation will result in a miraculous economic boom is bound to lead to disappointment.</p><p>The shortage economy could also reinforce the appeal of protectionism and state intervention. Many voters blame empty shelves and energy crises on the government. Politicians can escape responsibility by condemning fickle foreigners and fragile supply chains, and by talking up the false promise of boosting self-reliance. The government is trying to claim labour shortages are good for raising economy-wide wages and productivity.</p><p>Disruptions often lead people to question economic orthodoxies. The trauma of the 1970s led to a welcome rejection of big government and crude Keynesianism. The risk now is that strains in the economy lead to a repudiation of decarbonisation and globalisation, with devastating long-term consequences. That is the real threat posed by the shortage economy.</p>
+        </article>
+        <article id="t4.3">
+            <h2>How to teach children the value of money</h2>
+            <span class="source-meta">The Guardian | December 11, 2021</span>
+            <p>The early experiences children have can shape their financial behaviour as adults, according to the government’s Money Helper service. By the age of seven, most children are capable of grasping the value of money, delaying gratification and understanding some choices are irreversible or will cause them problems in the future. It suggests young children, who can make age-appropriate financial decisions and experience spending or saving dilemmas, will form positive “habits of the mind”.</p>
+
+<p>This could lead to a lifelong improvement in their ability to plan ahead, and be reflective in their thinking about money. They may learn how to regulate their impulses in a way that promotes positive financial behaviour later in life.</p>
+
+<p>Juliette Collier says it is worth giving children as young as three their own coins to spend and save. She says, “If they end up wanting to spend it on sweeties, make it clear they can’t spend it on something else. Let them make choices, and experience the consequences”.</p>
+
+<h3>Make it fun</h3>
+
+<p>There are lots of free resources available. Valuesmoneyandme offers free online books and interactive quizzes for primary school-age children that explore interesting ethical questions and real-world financial dilemmas. FunKidsLive hosts a short money podcast and there’re free games online. Besides, do not underestimate the value of playing games such as “going to the shops” at home with real coins.</p>
+
+<h3>Discuss its purpose</h3>
+
+<p>Collier suggests taking photos of different items that can be classified into necessities and luxuries, triggering a discussion about what money is for.</p>
+
+<p>She also recommends talking about hidden costs — such as for heating, electricity and water bills — and involving children in attempts to save. You could challenge them to a “no spend” day or make a recipe from the Love Food, Hate Waste website, using only ingredients in the cupboard.</p>
+
+<p>Discuss the need to prioritise spending and how difficult it can be if you feel tempted to buy something you cannot afford.</p>
+
+<h3>Go to the shops</h3>
+
+<p>One of the best places to teach children about money is a shop. “Being able to handle money builds up confidence,” says Dr Ems Lord.</p>
+
+<p>If you pay with a contactless card, explain how it works and discuss the groceries you buy. Why might you choose to spend more on Fairtrade chocolate or free-range eggs? Are the more expensive products always better quality?</p>
+
+<p>Be on the alert for buy-one-get-one-free offers and complicated discounts. “It’s absolutely essential we teach children about money in context,” says Lord. “Encouraging them to work out the cost and comparing offers so they understand the value is an essential life skill”.</p>
+
+<h3>Make savings meaningful</h3>
+
+<p>Open a Junior ISA account and buy a few shares in a supermarket or restaurant chain you visit regularly, suggests John Lee, the author of Yummi Yoghurt, a book about investing aimed at teenagers. You can explain that you both have a “vested interest” in supporting the business of the supermarket or the restaurant hoping one day you will get a reward in the form of a dividend if it does well.</p>
+
+<p>You could also talk about how you choose other funds for their Isas and the impact you hope they might have on society or the environment. “The important thing is to give your children an awareness of the companies that you’re buying shares in,” Lee says.</p>
+
+<h3>Visit a charity shop</h3>
+
+<p>These are particularly good places to take children to spend their pocket money. They often find a bargain and you can use the opportunity to discuss the power of their pound: how does it make them feel, knowing they are supporting a good cause as well as getting something for themselves?</p>
+
+<p>Point out the positive impact on the environment of buying secondhand and look up how much the item would have cost new, and talk about how many more weeks it would have taken to save up for it.</p>
+
+<p>Ask why they think people donate to charity shops and whether they would like to do so with their old toys: how valuable will these be to the charity? What difference could their donation make to someone’s life?</p>
+        </article>
+    </section>
+
+    <section id="test5" class="test-section">
+<div class="quick-links">
+    <div style="font-size: 0.7em; color: #bdc3c7; margin-bottom: 5px;">NAVIGATION</div>
+    <a href="#t5.1">Text 1</a>
+    <a href="#t5.2">Text 2</a>
+    <a href="#t5.3">Text 3</a>
+    <a href="#" style="margin-top:10px; color:#e74c3c;">↑ Top</a>
+</div>
+        <article id="t5.1">
+            <h2>Will the metaverse live up to the hype?</h2>
+            <span class="source-meta">Wired/GDC Survey | 2023</span>
+            <p>Companies like Meta are still betting big on immersive virtual worlds, but people who have been building digital spaces for years don’t see the long-term potential.</p>
+
+<p>The perfect version of the metaverse, to hear tech heads like Mark Zuckerberg tell it, marries social media, entertainment, and — most exciting of all — meetings in one pristine virtual space. Long ago foretold in Neal Stephenson’s Snow Crash, it is a place where the online world offers more experiences than the flesh-and-bone one. But whereas Stephenson’s metaverse was part of an apocalyptic future, modern inventors have promised a digital utopia.</p>
+
+<p>Unfortunately, the metaverse they’ve built has, so far, lived up to those expectations about as well as a Craigslist apartment rented based on photos alone. Zuckerberg’s Horizon Worlds, clunky and strange, may have been at its most thrilling when Meta informed users that legs for their avatars were “coming soon”. The hardware needed to visit such virtual worlds — often a headset like Meta’s Quest Pro — can be pricey and cumbersome, and once you get there, it’s no party.</p>
+
+<p>None of this is lost on those who actually build digital worlds. In a survey released today by the organisers of the Game Developers Conference, a whopping 45 percent of them said “the metaverse concept will never deliver on its promise”. It was the most popular response to a question about which companies or platforms are “best placed to deliver on the promise of the metaverse concept,” and a telling sign of what kind of faith the industry is putting in the long-term potential of immersive virtual worlds. “The people trying to sell it have no idea what it is,” wrote one respondent, “and neither do the consumers”.</p>
+
+<p>The survey, released by GDC ahead of its annual event in late March, comes after a rough 2022 for metaverse evangelists. Not only is there cynicism about who is building these worlds, and for what purpose, but many potential metaverse inhabitants aren’t convinced there’s any there there. Meta lost money and laid off workers last year, and even proto-metaverse worlds like Minecraft and Roblox now sit low on the game developers’ list for anticipated success.</p>
+
+<p>It’s not for a lack of trying. Some developers are still interested in releasing AR/VR games on platforms like Meta Quest and PlayStation VR2. Of those polled, 36 percent listed Meta Quest as a platform they expect to release their next game on. For PS VR2, that number is 18 percent.</p>
+
+<p>Faith in the metaverse, as the survey put it, lies with Epic Games. While nearly half of respondents said its promise will never be fulfilled, 14 percent did think that if any platform had a shot at doing so it was the company’s Fortnite. Meanwhile, only 7 percent thought Horizon Worlds had a shot; same with Minecraft. Five percent thought Roblox could do it.</p>
+
+<p>Fortnite earned that confidence over the years thanks to Epic’s curation of events like in-world concerts featuring artists such as Marshmello, Travis Scott, and Ariana Grande. No longer just a place for players to duke it out, it’s a space where people can enjoy other forms of entertainment together. But Fortnite was not the first game to offer virtual communities, nor even the second or third. “The metaverse needs to acknowledge that it is reinventing the wheel,” one respondent said, pointing to Linden Lab’s 20-year-old virtual world, Second Life. “And then identify why people lost interest in the wheel the first few times around”.</p>
+
+<p>“[The metaverse] already exists and is sustainable,” another developer wrote. “It’s simply being re-sold as a new concept by corporations trying to profit off it”. (In Meta’s case, its pivot to the metaverse has been accompanied by plummeting profits and flat growth).</p>
+
+<p>The metaverse may one day see its true potential realised, but it likely won’t be as Zuckerberg, or even Stephenson, imagined it. For the metaverse to become a true alternate reality, it needs to be built by its own users. “Any version of it that exists solely in the hands of one corporation as an ad platform, virtual workstation, or virtual real estate market is doomed to fail eventually,” one developer wrote. “It needs to be built of things users actually care about”.</p>
+        </article>
+        <article id="t5.2">
+            <h2>Transformative businesses are born in tough times</h2>
+            <span class="source-meta">2023 Analysis</span>
+            <p>It has been a tough year for entrepreneurs. Funding has been tight, top-flight leaders have been harder to lure away from secure corporate jobs, and marketing and discretionary spending has been at a standstill. Economic crunches are no fun for anyone, but when you’re trying to build a global business from scratch, the headwinds feel like a typhoon.</p>
+
+<p>If we take a longer view, though, there’s good reason for optimism. Historically, the most exciting and generation-defining startups have been those built in challenging times. Think of Facebook, launched in 2004, in the shadow of the dotcom bust. Google also raised capital in this period and managed to grow through the broader economic slowdown. Fintech companies like Square and Stripe were founded in the wake of the 2008 subprime crisis, which dented confidence in mainstream finance.</p>
+
+<p>Why might this be? First, different economic cycles attract different kinds of entrepreneurs. When money is running hot, investors meet plenty of “momentum” founders: people who are riding a wave, and who can easily find another job if things don’t work out. But entrepreneurs who build companies after a downturn are a different bunch. They usually have a meaningful vision that they’re going to realise, no matter what, and they tend to be relentless in pursuing it. With fewer job opportunities to fall back on, they — and their employees — will naturally be more attached to the success of the company. This kind of dedication filters for those who can relentlessly execute, and it generates companies poised to better take advantage of opportunities when economic conditions improve.</p>
+
+<p>A second benefit of starting a business in a downturn is that there is less competition. In bull markets, there might be a dozen other businesses trying to outcompete you in almost any sector. But during a recession, there will be fewer people trying to get a cut of the action. This leaves the space wide open for motivated entrepreneurs to seize the first-mover’s advantage and claim the market.</p>
+
+<p>Finally, companies created after a crash also find it easier to source the talent they need. When the business cycle is in an upturn, attracting and retaining the right people to help you grow is often a founder’s number-one headache. Talented workers are flooded with opportunities and tend to jump between companies more frequently. But with fewer well-capitalised companies vying for talent, you might have a better chance nailing the right executive hire.</p>
+
+<p>These reasons show why, in 2023, we can expect the launch of the most transformative companies of the coming decade. The type of businesses that will bloom will be a direct response to the many crises that have affected us in the past few years: the pandemic, record temperatures and wildfires caused by climate breakdown.</p>
+
+<p>For example, because of the pandemic and the pressure on health care systems around the world, we expect to see an upswell in companies seizing opportunities in health care and pharma. These will include AI-powered medical technologies that tackle the systemic problems of national health care systems and the use of mRNA vaccines to tackle other diseases like malaria and diabetes.</p>
+
+<p>Another major trend concerns climate and the environment. Many entrepreneurs today are gearing up to address environmental problems and the second-order consequences head-on, targeting sectors like energy, transportation, manufacturing, and finance, among others. Escalating geopolitical tensions have also brought questions of security, autonomy, and stability to the fore. This new geopolitical environment will result in opportunities for new companies in strategic areas like defense, hardware, cybersecurity, energy, and food.</p>
+
+<p>In 2023, businesses tackling the enormous challenges that confront society might not start out looking like world-beating companies. They’ll have to be scrappy, resourceful, and lean. But you can be sure, in a decade’s time, they’ll be the names on everyone’s lips.</p>
+        </article>
+        <article id="t5.3">
+            <h2>A wave of films and shows exploring psychotherapy</h2>
+            <span class="source-meta">Cultural Review | 2023</span>
+            <p>In 1924, a Hollywood producer offered $100,000$ (around $1.7m$ today) to work on a project about great love stories in history. Freud declined. He ignored an Austrian director, too, who wanted psychoanalysts to help with a silent movie about a scientist with a phobia of knives. Freud thought film-making and therapy were difficult to reconcile: the risk of sensationalism was too high.</p><p>Commissioners and television executives have not minded Freud’s concerns: fictional and real therapists crop up frequently on screens, from Shrinking to The Patient and Couples Therapy to Stutz. Screenwriters have long used psychiatrists as a narrative tool. In their book Psychiatry and the Cinema, Glen Gabbard, a psychiatrist, and Krin Gabbard, an academic specialising in film studies, said a therapist often functions as what Henry James, a 19th-century English writer, called a ficelle: a character who holds the metaphorical marionette strings that orchestrate the plot. The encounter between analyst and patient can provide colour and context, as their conversations prompt characters to think back over their lives, recollections sometimes dramatised as flashbacks.</p><p>Therapy sessions can also provide moments of epiphany for a protagonist. For the viewer, the revelatory feeling can echo the satisfaction felt when a detective solves a crime.</p><p>One of the earliest portrayals of the profession, a silent comedy film called Dr Dippy’s Sanitarium (1906), features a clinician who treats patients by offering them pies. In Alfred Hitchcock’s Spellbound (1945), Ingrid Bergman played a psychoanalyst trying to assess whether her new colleague and love interest (Gregory Peck) is a murderer suffering from amnesia. In One Flew Over the Cuckoo’s Nest (1975), Dean Brooks, the real-life boss of the psychiatric hospital where the film was made, played a small role as a doctor at the fictional institution. Brooks apparently had no concerns about the film damaging his profession’s reputation.</p><p>Today, many therapists are uneasy about fictionalisations of their work. “It’s important that clients who need help have a realistic idea of what therapy is and what it isn’t,” says Sally Brown, a counsellor and member of the British Association for Counselling and Psychotherapy (BACP). “Good therapy does not make good drama”. She hopes that audiences are astute enough to know when something is exaggerated for dramatic purposes; she is most concerned by portrayals in which an inept professional’s treatment is ineffective. For example, The Responder, a BBC police drama of 2022, featured an amenable but useless therapist who treats her job like “a tick-box exercise”, says Ms. Brown.</p><p>In The Patient, a recent show, Steve Carell plays a therapist whose client locks him in a basement and demands to be cured of his murderous compulsions. The character excels at what he does and conjures the illusion of professionalism in testing circumstances. By contrast, Jimmy Laird (Jason Segel), the protagonist of Shrinking, is a very bad therapist. Grieving his dead wife, he ditches the guiding rules of his profession and decides to become a “psychological vigilante”. He tells one patient to leave her husband, or he’ll stop treating her and invites another, an ex-soldier, to live in his outhouse. Ms. Brown thinks The Sopranos provides an exemplary depiction of therapy. Jennifer Melfi (Lorraine Bracco) gives Tony Soprano wise counsel and understands his nature. After she is attacked in a car park, Melfi chooses not to tell the mob boss the name of her assailant, knowing he would exact merciless revenge on her behalf.</p><p>Some documentaries about psychotherapy profess to be educational. Couples Therapy shows real-life couples in therapy with Orna Guralnik, a star psychoanalyst. In Stutz Jonah Hill, an American actor, explores his relationship with his psychiatrist, Phil Stutz. But, even in this format, professional boundaries are muddled; confidentiality is obliterated. Once the camera is turned on, “you’re performing”, says Denise Freeman, a psychotherapist and BACP member who has worked in television. “You have to question how much is real and how comfortable the client is”.</p><p>Despite these ethical questions, the shrink will continue to appeal to screenwriters, producers and audiences alike: thanks to the economic downturn, viewers are both more unhappy and more open about that unhappiness. In 2020, depression and anxiety increased by more than 25% globally, according to the Lancet, a medical journal. In 2010, a fifth of British people said they had turned to a counsellor; by 2022 a third had. Perhaps peeking inside a fictional consultation room may inspire some viewers to hop onto the couch themselves.</p>
+        </article>
+    </section>
+
+    <section id="test6" class="test-section">
+<div class="quick-links">
+    <div style="font-size: 0.7em; color: #bdc3c7; margin-bottom: 5px;">NAVIGATION</div>
+    <a href="#t6.1">Text 1</a>
+    <a href="#t6.2">Text 2</a>
+    <a href="#t6.3">Text 3</a>
+    <a href="#" style="margin-top:10px; color:#e74c3c;">↑ Top</a>
+</div>
+        <article id="t6.1">
+            <h2>Papers and patents are becoming less disruptive</h2>
+            <span class="source-meta">Nature Study | 2023</span>
+            <p>“Ideas are like rabbits,” John Steinbeck said. “You get a couple and learn how to handle them, and pretty soon you have a dozen.” Scientific and technological progress is often viewed in this way. Current ideas build on previous ones. And ideas, along with papers and patents, have indeed proliferated in the recent past.</p>
+
+<p>Yet despite — or perhaps because of — this productivity (papers published and patents issued each year now number in the millions), it has been documented that innovation within specific fields has been in decline. For example, a paper titled “Science in the age of selfies”, published in 2016, warned of a shifting incentive-and-information landscape in biology, particularly neuroscience, that has diluted the number of high-impact discoveries.</p>
+
+<p>Michael Park and Russell Funk of the University of Minnesota, and Erin Leahey of the University of Arizona, have set out to determine whether this decline holds for science and technology in general. In a study published this week in Nature they analyse 45 m papers and 3.9 m patents published and filed between 1945 and 2010.</p>
+
+<p>The measurement they use for this work, known as the CD index, quantifies how “consolidating” or “disruptive” each paper or patent is. A paper is consolidating (a low CD score) if later work citing it also cites the papers that it, itself, cited. Discoveries and inventions of this sort — like a patent awarded in 2005 for genetically modified soyabeans — serve to propel science forward along its existing trajectory. By contrast, a paper is disruptive (a high CD score) if it is cited by later work in the absence of citations of its predecessors. A classic example of that was the study published in 1953 by James Watson and Francis Crick on the double-helical structure of DNA. High-CD papers disrupt the status quo, fundamentally altering a field’s trajectory or creating a new field altogether.</p>
+
+<p>Both consolidating work and disruptive work are needed for scientific progress, of course, but science now seems to favour the former over the latter in a potentially unhealthy way. Mr. Park and Drs Leahey and Funk found that the average CD score for papers has fallen by between 92% and 100% since 1945, and for patents between 79% and 92%. These declines are not mere artefacts of changing publication, citation or authorship practices; the researchers controlled for that. Why, then, has science become less disruptive?</p>
+
+<p>One hypothesis is the low-hanging-fruit theory — that all the easy findings have been plucked from the branches of the tree of knowledge. If true, this would predict different fields would have different rates of decline in disruption, given that they are at different stages of maturity. But that is not the case. The decline the researchers found was comparable in all big fields of science and technology.</p>
+
+<p>Another idea is that the decline in disruptiveness stems from one in the quality of published work. To test this, the researchers looked at two specific categories: papers in premier publications and Nobel-prize winning discoveries. “If there were a pocket of science where the quality might have declined less, or hasn’t declined,” said Mr. Park, “it would be in those places.” But the downward trend persisted there, too.</p>
+
+<p>A more likely reason for the change, the researchers argue, is that scientists and inventors are producing work based on narrower foundations. They found that citing older work, citing one’s own work, and citing less diverse work all correlate with less disruption. As the amount of published science grows, the effort required to master a pool of knowledge that is both deepening and narrowing as the years roll by may inhibit the ability to form creative connections between disparate fields. Here is an argument for the rebirth of the renaissance humanism.</p>
+
+<p>Mr. Park maintains there is room for optimism. Though the average disruptiveness of discoveries has declined, the number of “highly disruptive” ones has remained constant. Humanity does not appear to be reaching the end of science. Albert Michelson, winner of the 1907 Nobel prize in physics for his work on the immutability of the speed of light, which underlay Albert Einstein’s special theory of relativity, is as wrong now as he was in 1894, when he said that it was “probable that most of the grand underlying principles have been firmly established”.</p>
+        </article>
+        <article id="t6.2">
+            <h2>Direct-to-consumer is dying</h2>
+            <span class="source-meta">Retail Trends | 2023</span>
+            To reach customers, brands will need to combine creativity across Web3, social media, online retail, and in-store experiences.
+In the past decade, storied brands like meal-replacement Huel and men’s grooming company Harry’s built multibillion-dollar retail businesses by using social media and digital-first advertising to sell directly to consumers online, without the need for middlemen. These brands were exemplars of a new form of retail, called direct-to-consumer (DTC).
+The global pandemic only accelerated this trend, with many high-street stores being forced to close and to keep driving sales by going direct to shoppers online. Some brands successfully navigated the transition, like outdoor pizza oven maker Ooni, whose sales exploded during lockdown, with annual revenue up from £$13.7$ million in $2019$ to £$52.7$ million in $2020$. Shoppers also adapted — around $60$ percent purchased from a direct-to-consumer brand at least once in $2021$.
+As the pandemic slowly recedes, the market is again changing rapidly. Older, more established brands have now embraced the DTC approach — Nike’s direct-to-consumer sales in $2021$, for instance, grew $30$ percent to $$16.5$ billion. On the other hand, stocks of some of the biggest, publicly listed DTC brands — such as Warby Parker and Allbirds — have dropped as much as $64$ percent in $2022$.
+There are obvious economic factors behind this underperformance. The rebalancing of the economy, with inflation rising and squeezed supply chains, is piling the pressure on retailers. According to a report by McKinsey, rising prices are the number one concern for two thirds of UK consumers, with approximately $70$ percent saying that they have recently changed their shopping habits and are more open than ever to buy cheaper brands.
+But other factors are at play in the recent crash of DTC brands. For instance, in $2021$, Apple introduced a new transparency feature, which allowed users to opt out of app tracking, making it harder and more expensive for these brands to acquire new customers via paid social media advertising.
+As a result of these market forces, in $2023$, DTC retail will evolve into a new, more resilient iteration which I call connect-to-consumer (CTC). This new approach is about taking many pathways to reach customers simultaneously: From social media to Web3, from online shopping to the high-street stores.
+Consider the example of fitness apparel brand Gymshark, which in July opened a pop-up barbershop staffed with mental-health trained barbers to encourage men to open up about their problems while receiving a trim. Men’s make-up brand War Paint, on the other hand, is turning abandoned stores into showrooms for online buyers.
+Much experimentation with the CTC model is also happening on social media platforms. Kylie Jenner, for instance, is using TikTok Shopping — a new feature launched in $2022$ in partnership with Shopify that allows users to link their TikTok accounts to their online stores — enabling her followers to buy directly from Kylie Cosmetics on the platform. According to Shopify, orders made on social media channels quadrupled in the first quarter of $2022$.
+This retail opportunity extends to YouTube. British YouTube influencer Gabriella, for instance, uses her channel to sell stationery to nearly $900,000$ followers. United Stand, an unofficial Manchester United fan channel with $1.4$ million followers, also sells merchandise to its community via YouTube and Shopify.
+It is also creating new opportunities for brands to connect with consumers. You might even have a token or NFT in your digital wallet to unlock an exclusive offer online or a VIP experience on the high street. This is already hitting the mainstream, with Starbucks rolling out a Web3-based rewards program to give customers exclusive perks.
+The retailers who will win in $2023$ are those focused on building authentic connections to their customers through all of these avenues. These businesses will thrive by becoming channel-agnostic: The tools exist now to operate a store everywhere, reaching hundreds on the high street to billions on YouTube and TikTok, as well as niche communities in Web3.
+        </article>
+        <article id="t6.3">
+            <h2>The relationship between AI and humans</h2>
+            <span class="source-meta">Management Research | 2023</span>
+            <p><p>If you ask something of ChatGPT, an artificial-intelligence (AI) tool that is all the rage, the responses you get back are almost instantaneous, utterly certain and often wrong. It is a bit like talking to an economist. The questions raised by technologies like ChatGPT yield much more tentative answers. But they are ones that managers ought to start asking.</p>
+
+<p>One issue is how to deal with employees’ concerns about job security. Worries are natural. An AI that makes it easier to process your expenses is one thing; an AI that people would prefer to sit next to at a dinner party is quite another. Being clear about how workers would redirect time and energy that is freed up by an AI helps foster acceptance. So does creating a sense of agency: research conducted by MIT Sloan Management Review and the Boston Consulting Group found that an ability to override an AI makes employees more likely to use it.</p>
+
+<p>Whether people really need to understand what is going on inside an AI is less clear. Intuitively, being able to follow an algorithm’s reasoning should trump being unable to. But a piece of research by academics at Harvard University, the Massachusetts Institute of Technology and the Polytechnic University of Milan suggests that too much explanation can be a problem.</p>
+
+<p>Employees at Tapestry, a portfolio of luxury brands, were given access to a forecasting model that told them how to allocate stock to stores. Some used a model whose logic could be interpreted; others used a model that was more of a black box. Workers turned out to be likelier to overrule models they could understand because they were, mistakenly, sure of their own intuitions. Workers were willing to accept the decisions of a model they could not fathom, however, because of their confidence in the expertise of people who had built it. The credentials of those behind an AI matter — trust in expertise often outweighs the need for transparency.</p>
+
+<p>The different ways that people respond to humans and to algorithms are a burgeoning area of research. In a recent paper Gizem Yalcin of the University of Texas at Austin and her co-authors looked at whether consumers responded differently to decisions — to approve someone for a loan, for example, or a country-club membership — when they were made by a machine or a person. They found that people reacted the same when they were being rejected. But they felt less positively about an organisation when they were approved by an algorithm rather than a human. The reason? People are good at explaining away unfavourable decisions, whoever makes them. It is harder for them to attribute a successful application to their own charming, delightful selves when assessed by a machine. People want to feel special, not reduced to a data point.</p>
+
+<p>In a forthcoming paper, meanwhile, Arthur Jago of the University of Washington and Glenn Carroll of the Stanford Graduate School of Business investigate how willing people are to give rather than earn credit — specifically for work that someone did not do on their own. They showed volunteers something attributed to a specific person — an artwork, say, or a business plan — and then revealed that it had been created either with the help of an algorithm or with the help of human assistants. Everyone gave less credit to producers when they were told they had been helped, but this effect was more pronounced for work that involved human assistants. Not only did the participants see the job of overseeing the algorithm as more demanding than supervising humans, but they did not feel it was as fair for someone to take credit for the work of other people.</p>
+
+<p>Another paper, by Anuj Kapoor of the Indian Institute of Management Ahmedabad and his co-authors, examines whether AIs or humans are more effective at helping people lose weight. The authors looked at the weight loss achieved by subscribers to an Indian mobile app, some of whom used only an AI coach and some of whom used a human coach, too. They found that people who also used a human coach lost more weight, set themselves tougher goals and were more fastidious about logging their activities. But people with a higher body mass index did not do as well with a human coach as those who weighed less. The authors speculate that heavier people might be more embarrassed by interacting with another person.</p>
+
+<p>The picture that emerges from such research is messy. It is also dynamic: just as technologies evolve, so will attitudes. But it is crystal-clear on one thing. The impact of ChatGPT and other AIs will depend not just on what they can do, but also on how they make people feel.</p>
+        </article>
+    </section>
+
+    <section id="test7" class="test-section">
+<div class="quick-links">
+    <div style="font-size: 0.7em; color: #bdc3c7; margin-bottom: 5px;">NAVIGATION</div>
+    <a href="#t7.1">Text 1</a>
+    <a href="#t7.2">Text 2</a>
+    <a href="#t7.3">Text 3</a>
+    <a href="#" style="margin-top:10px; color:#e74c3c;">↑ Top</a>
+</div>
+        <article id="t7.1">
+            <h2>Break the hateful passive-aggressive email chain</h2>
+            <span class="source-meta">The Guardian | August 28, 2018</span>
+            <p>Remember the last time you were scrolling through an email and saw phrases like “Reattached for your convenience”, “sorry for the double email” or “please advise”? You’re not alone if you felt enraged by reading them. In fact, a recent Adobe survey found that the nine most loathed phrases in emails all had one thing in common: passive aggression.</p>
+
+<p>Passive aggressive behaviour is a frequent complaint in the workplace. It was coined by William Menninger, a colonel in the US army in 1945. Writing in a technical bulletin, he described soldiers as passive aggressive when they would willfully evade duties by not carrying them out competently. They expressed their hatred of assigned tasks by “passive measures such as pouting, stubbornness, procrastination, inefficiency and passive obstructionism”. Menninger thought such behaviour was a sign of immaturity and a reaction to “routine military stress”.</p>
+
+<p>By 1952, the phrase was included as a personality disorder in the Diagnostic and Statistical Manual of Mental Disorders (DSM), the most important reference book for psychologists. In 1966, 3% of admissions to mental institutions were for passive aggressive personality disorder, with 9% of those visiting outpatient clinics diagnosed as passive aggressive. In the second edition of the DSM, passive aggression was described as reflecting “hostility which the individual feels he dare not express openly” and that “often the behaviour is one expression of the patient’s resentment at failing to find fulfilment in a relationship with an individual or institution on which he is over dependent”.</p>
+
+<p>The next edition of the DSM, issued in 1980, described passive aggressive people as “ineffective both socially and occupationally”, and because of their “intentional inefficiency job promotions are not offered to them”. Since 1980, we have seen an explosion of interest in passive aggression. By 2005, three management consultants writing in the Harvard Business Review claimed that 27% of organisations were passive aggressive.</p>
+
+<p>When Menninger first coined the term, passive aggression was a behaviour of the subordinate. The soldier, the factory worker, the failing salesman, were described as passive aggressive. Each one of these passive aggressive individuals was in a less-powerful position. Today, we seem to be witnessing a strange reversal whereby passive aggression is frequently used to describe people in positions of power. Think about the Adobe survey. The emails we hate the most are likely to come from our boss.</p>
+
+<p>In the past, passive aggressive individuals were characters like Menninger’s soldiers who were resentful about carrying out orders. Now we seem to be seeing a new kind of passive aggressive: a person in a position of power who is resentful about giving orders. These passive-aggressive bosses seem to loathe the thought that they should ask someone to do something — presumably because their subordinate should have already predicted their wishes in advance.</p>
+
+<p>What people hate so much about a passive-aggressive boss is that they present themselves as giving a kindly nudge in the right direction. But they also make it clear that underneath it waits a real threat. But what is often more troubling about a passive-aggressive boss is they are good at implying we are incompetent idiots who are not able to keep on top of our lives. Think about an email asking you to look back at past correspondence. Usually this implies your intelligence is so limited that you were not able to take in this precious information.</p>
+
+<p>Stopping this kind of passive aggression seems tough. Just remember: What’s of deep importance to you at this very second may be of minor importance to the other people. They have their own priorities and worries, and adding to their inbox is unlikely to make them happy. However, if you do have to ask someone to do something, then just say it. Be polite, but be clear. This will get rid of passivity that enrages people.</p>
+        </article>
+        <article id="t7.2">
+            <h2>London's Micro-Flats</h2>
+            <span class="source-meta">The Telegraph | September 2017</span>
+            <p>Housing in and near the centre of the capital is now so expensive that developers are resorting to building tiny homes in order to meet demand from young professionals.</p>
+
+<p>London-based firm U+i is one developer working up plans to build thousands of flats in the capital’s centre which are around half of the recommended size, in order to cater for workers who struggle to rent. The company said it was in discussions with a number of inner London districts to build the homes, the smallest of which has just 19m² of floor space — far less than the 37m² minimum which is the recommended standard from the Greater London Authority.</p>
+
+<p>Such is the demand for smaller dwellings that John Lewis is working on a new range of furniture for small flats in order to capitalise on the trend. It has already fitted out two test flats which U+i has built within its London headquarters.</p>
+
+<p>It follows a report by the think-tank Development Economics which suggests that building smaller flats on just five example sites could bring an additional £200m of income and more than 1,000 new jobs to central London by allowing young workers to live in the heart of the city.</p>
+
+<p>The report warns that without new solutions to the lack of housing in the centre of London, the capital risks being reduced to a ghost town. It suggests that enabling young workers to live centrally could revitalise the centre of the city, bringing around 3,500 more working adults than traditional housing developments on the same sites.</p>
+
+<p>Stephen Lucas, from Development Economics, said: “With greater numbers of people than ever choosing location over space when deciding where to live, building sufficient quantities of high-quality, centrally located housing will be essential for London’s future economic, social and cultural growth.”</p>
+
+<p>He added that professionally managed small flats would lead to an increase in the number of young people in work living in the city centre, boosting the economy.</p>
+
+<p>The smaller size would allow homes to be built in London’s Zone One, but be made available at London Living Rent prices, which are set by districts and are based on a third of the average household income.</p>
+
+<p>Richard Upton, deputy chief executive of U+i, said: “The centre is now only affordable to either the very wealthy, only occasionally present, or those living in what social housing remains. For a new generation of workers in the middle, often working centrally, living in the middle of London has long been a dream. People increasingly want to live, work and play in the same place and we want to develop something that brings communities back to life and delivers real social and economic benefits.”</p>
+
+<p>He said the company aims to develop the sites in association with the public sector, on unused space which would then be retained by the public body in order to generate income. The flats would be held as rental properties and not sold, in order to deter speculators, and would include a number of communal facilities such as office space.</p>
+
+<p>But housing charity Shelter has warned that allowing some developers to circumvent existing space standards and build smaller homes could result in a decline in quality. The standards are allowed to be ignored if the developer can guarantee “exemplary design”, but Shelter has warned it could lead to cubicle sized homes. In addition, they argue, “micro flats” could occupy sites that are currently available for social housing.</p>
+
+<p>It argues that a reduction in size also does not necessarily result in a decrease in rent, because land prices could increase due to building more homes in a smaller space.</p>
+        </article>
+        <article id="t7.3">
+            <h2>The Larger Lie: College Admissions</h2>
+            <span class="source-meta">TIME | March 14, 2019</span>
+            <p>In the admissions scandal, the FBI charged a list of wealthy parents, including some famous actors, with fraud on March 12. Their alleged goal: to get their kids into top schools, including Yale and Stanford. The public reactions ranged from outrage to cynicism. The outrage: These parents think they can buy their kids anything. The cynicism: These parents could have done the same thing legally by “charitably” funding a new building or two. Despite the grand aspirations that students declare on their admission essays, their overriding goal is not enlightenment, but status. People don’t cheat because they want to learn more. They cheat to get a diploma from Yale or Stanford — today’s preferred passport to great careers and high society.</p>
+
+<p>What, then, is the point of sneaking into an elite school, if you lack the ability to master the material? If the cheaters planned to major in one of the rare subjects with clear standards and well-defined career paths — like computer science, electrical engineering or chemistry — this would be a show-stopping question. Most subjects, however, ask little of their students — and get less. Standards were higher in the 1960s, when typical college students toiled about 40 hours a week. Today, however, students work only two-thirds as hard. Full-time college has become a part-time job.</p>
+
+<p>Most of what college students study is irrelevant in the real world. Think of all the math, history, science, poetry and foreign language you had to study in school — if you can. Few of us use it, so almost all of us lose it. The average high school student studies a foreign language for a full two years, but, according to my own research, less than 1% of American adults even claim they gained fluency in a classroom.</p>
+
+<p>Why do employers put up with such a dysfunctional educational system? Part of the answer is that American higher education performs one useful service for American business: certification. Most students at places like Yale and Stanford aren’t learning much, but they’re still awesome to behold if you’re looking to fill a position. They hunger for conventional success. As long as elite students usually make excellent employees, the mechanism doesn’t matter.</p>
+
+<p>So why cheat your kid into the Ivy League or a similarly elite school? For the lifelong benefits of corrupt certification. When I was in high school, my physical education teacher loved to single out a random teen and yell, “You’re wanted ... for impersonating a student.” If you can get your less-than-brilliant, less-than-driven child admitted, he’ll probably get to impersonate a standardly awesome Ivy League graduate for the rest of his life. Of course, the superrich parents the FBI is accusing could have just let their kids live off their own money, but it’s not merely a matter of money. It’s also about youthful self-esteem — and parental bragging rights.</p>
+
+<p>As a college professor, I’ve spent years blowing the whistle on the wasteful system that employs me. Yet truth be told, this scandal proves next to nothing. It just illustrates the obvious. Though we casually talk about our “institutions of higher learning,” little learning is going on. Sure, college is an intellectual feast for the rare students with a passion for ideas and the energy to locate the also-rare professors with a passion for teaching. The vast majority, however, come in search of a stamp on their foreheads that says grade A — and leave with little else. If the parents accused by the FBI are guilty as charged, don’t say they failed to understand the purpose of a college education. Say they understood its purpose all too well.</p>
+        </article>
+    </section>
+
+</div>
+
+<script>
+    function showTest(testId) {
+        // Update tabs
+        const tabs = document.querySelectorAll('.tab-link');
+        tabs.forEach(tab => {
+            tab.classList.remove('active');
+            if(tab.textContent.toLowerCase().replace(' ', '') === testId) {
+                tab.classList.add('active');
+            }
+        });
+
+        // Update sections
+        const sections = document.querySelectorAll('.test-section');
+        sections.forEach(sec => sec.classList.remove('active'));
+        
+        const activeSec = document.getElementById(testId);
+        activeSec.classList.add('active');
+
+        // Scroll to top
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    // Adjust tab active state on direct click (manual fix for naming)
+    document.querySelectorAll('.tab-link').forEach(tab => {
+        tab.addEventListener('click', function() {
+            document.querySelectorAll('.tab-link').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+</script>
+
+</body>
+</html>
