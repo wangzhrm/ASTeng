@@ -8,64 +8,29 @@
     <style>
         :root { --primary: #2c3e50; --accent: #3498db; --success: #27ae60; --bg: #f8f9fa; --warning: #e67e22; }
         body { font-family: 'Segoe UI', sans-serif; display: flex; height: 100vh; margin: 0; background: var(--bg); overflow: hidden; }
-        
-        /* Sidebar */
         #sidebar { width: 350px; min-width: 300px; background: white; padding: 20px; border-right: 1px solid #dee2e6; overflow-y: auto; height: 100vh; box-sizing: border-box; }
         #resizer { width: 8px; cursor: col-resize; background: #eee; transition: 0.2s; }
         #resizer:hover { background: var(--accent); }
-
-        /* Main Workspace */
         #editor-zone { flex-grow: 1; padding: 30px; display: flex; flex-direction: column; gap: 20px; overflow: hidden; position: relative; }
         .card { background: #fff; padding: 20px; border-radius: 10px; border: 1px solid #e9ecef; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
         h3 { margin: 0 0 10px 0; font-size: 11px; color: #adb5bd; text-transform: uppercase; letter-spacing: 1.5px; }
-        
         select, input, textarea { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
         button { cursor: pointer; padding: 10px; border: none; border-radius: 6px; font-weight: bold; transition: 0.2s; }
         .btn-add { background: var(--success); color: white; }
         .btn-primary { background: var(--accent); color: white; }
-
-        /* Interactive Highlight Styles */
         #display-box { 
             background: white; border: 1px solid #dee2e6; border-radius: 8px; padding: 30px; 
             flex-grow: 1; overflow-y: auto; font-family: 'Georgia', serif; line-height: 1.8; 
-            font-size: 1.15em; color: #2c3e50; position: relative;
+            font-size: 1.15em; color: #2c3e50; position: relative; white-space: pre-wrap;
         }
-
-        /* The visual highlight mark */
-        .temp-highlight {
-            background-color: #fff3bf;
-            border-bottom: 2px solid #fab005;
-            position: relative;
-            padding: 2px 0;
-            border-radius: 3px;
-        }
-
-        /* The "X" delete button on the highlight */
+        .temp-highlight { background-color: #fff3bf; border-bottom: 2px solid #fab005; position: relative; padding: 2px 0; border-radius: 3px; }
         .remove-hl {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 14px; height: 14px;
-            background: #ff4757; color: white;
-            font-size: 10px; border-radius: 50%;
-            margin-left: 4px; cursor: pointer;
-            vertical-align: middle;
-            font-family: sans-serif;
-            font-weight: bold;
-            border: none;
-            line-height: 1;
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 14px; height: 14px; background: #ff4757; color: white;
+            font-size: 10px; border-radius: 50%; margin-left: 4px; cursor: pointer;
+            vertical-align: middle; font-family: sans-serif; border: none; line-height: 1;
         }
-
-        /* Create Link Bar */
-        #create-link-bar {
-            display: none;
-            justify-content: space-between;
-            align-items: center;
-            background: #fff9db;
-            border: 1px solid #ffe066;
-        }
-
-        /* Saved Links List */
+        #create-link-bar { display: none; justify-content: space-between; align-items: center; background: #fff9db; border: 1px solid #ffe066; }
         #link-list { background: #f1f3f5; padding: 15px; border-radius: 8px; max-height: 180px; overflow-y: auto; }
         .link-item { background: white; padding: 10px; border-radius: 6px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e9ecef; }
         .link-info a { color: var(--accent); text-decoration: none; font-size: 13px; font-weight: bold; }
@@ -73,10 +38,8 @@
     </style>
 </head>
 <body>
-
 <div id="sidebar">
     <h2 style="margin-top:0; color:var(--primary); font-size: 20px;">AST Admin</h2>
-    
     <div class="card">
         <h3>1. Structure</h3>
         <input type="text" id="new-test-code" placeholder="New Test (e.g. T1)">
@@ -86,7 +49,6 @@
         <input type="text" id="new-text-code" placeholder="New Text (e.g. Text 1)" disabled>
         <button id="add-text-btn" class="btn-add" style="width:100%" onclick="addText()" disabled>Add Text</button>
     </div>
-
     <div class="card">
         <h3>2. Content</h3>
         <select id="main-test-select" onchange="syncTexts()"></select>
@@ -95,19 +57,13 @@
         <button class="btn-primary" style="width:100%" onclick="savePassage()">Save Content</button>
     </div>
 </div>
-
 <div id="resizer"></div>
-
 <div id="editor-zone">
     <div id="create-link-bar" class="card">
         <span id="hl-count" style="font-weight: bold; color: var(--warning);">0 items highlighted</span>
         <button class="btn-primary" onclick="generateMultiLink()">Create Final Link & Save</button>
     </div>
-
-    <div id="display-box" onmouseup="handleSelection()">
-        Select a Test and Text to begin. Highlight words to start.
-    </div>
-    
+    <div id="display-box" onmouseup="handleSelection()">Select a Test and Text to begin.</div>
     <div class="card" style="margin-bottom:0">
         <h3>3. Active Links</h3>
         <div id="link-list">
@@ -128,51 +84,49 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    let highlights = []; // Current active highlights {start, end, snippet}
+    let highlights = [];
 
-    // --- INTERACTIVE SELECTION ---
+    // Helper: Calculate offset ignoring '×' buttons
+    function getCleanOffset(root, targetNode, targetOffset) {
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null, false);
+        let currentOffset = 0;
+        while (walker.nextNode()) {
+            const node = walker.currentNode;
+            if (node === targetNode) return currentOffset + targetOffset;
+            if (node.parentNode.className !== 'remove-hl') {
+                currentOffset += node.textContent.length;
+            }
+        }
+        return currentOffset;
+    }
+
     function handleSelection() {
         const sel = window.getSelection();
-        const text = sel.toString().trim();
+        const text = sel.toString(); // Don't trim to preserve count
         if (!text || sel.rangeCount === 0) return;
 
         const range = sel.getRangeAt(0);
         const displayBox = document.getElementById('display-box');
-
-        // Verify selection is inside display-box
         if (!displayBox.contains(range.commonAncestorContainer)) return;
 
-        // Calculate absolute offsets (stripping existing tags mentally)
-        // We use innerText to get the clean text length before the selection
-        const preRange = range.cloneRange();
-        preRange.selectNodeContents(displayBox);
-        preRange.setEnd(range.startContainer, range.startOffset);
-        const start = preRange.toString().length;
+        const start = getCleanOffset(displayBox, range.startContainer, range.startOffset);
         const end = start + text.length;
 
-        // Visual confirmation: Wrap the selection in a <mark>
         const mark = document.createElement('mark');
         mark.className = 'temp-highlight';
         mark.dataset.start = start;
         mark.dataset.end = end;
         mark.dataset.snippet = text;
         
-        // Add delete button
         const delBtn = document.createElement('button');
         delBtn.className = 'remove-hl';
         delBtn.innerText = '×';
-        delBtn.onclick = (e) => {
-            e.stopPropagation();
-            removeHighlight(mark);
-        };
+        delBtn.onclick = (e) => { e.stopPropagation(); removeHighlight(mark); };
 
         try {
             range.surroundContents(mark);
             mark.appendChild(delBtn);
-        } catch(e) {
-            console.warn("Selection spans across existing highlights. Please select clean text.");
-            return;
-        }
+        } catch(e) { return; }
 
         sel.removeAllRanges();
         refreshHighlightState();
@@ -181,14 +135,11 @@
     function removeHighlight(element) {
         const parent = element.parentNode;
         while (element.firstChild) {
-            if (element.firstChild.className !== 'remove-hl') {
-                parent.insertBefore(element.firstChild, element);
-            } else {
-                element.removeChild(element.firstChild);
-            }
+            if (element.firstChild.className !== 'remove-hl') parent.insertBefore(element.firstChild, element);
+            else element.removeChild(element.firstChild);
         }
         parent.removeChild(element);
-        parent.normalize(); // Merge text nodes
+        parent.normalize();
         refreshHighlightState();
     }
 
@@ -199,11 +150,8 @@
             end: parseInt(m.dataset.end),
             snippet: m.dataset.snippet
         }));
-        
-        const bar = document.getElementById('create-link-bar');
-        const count = document.getElementById('hl-count');
-        bar.style.display = highlights.length > 0 ? 'flex' : 'none';
-        count.innerText = `${highlights.length} item(s) highlighted`;
+        document.getElementById('create-link-bar').style.display = highlights.length > 0 ? 'flex' : 'none';
+        document.getElementById('hl-count').innerText = `${highlights.length} item(s) highlighted`;
     }
 
     async function generateMultiLink() {
@@ -212,14 +160,10 @@
         if (highlights.length === 0 || !test || !text) return;
 
         const passageId = `${test}_${text}`;
-        
-        // Sort highlights by start position to keep URL parameters clean
         highlights.sort((a, b) => a.start - b.start);
-
         const starts = highlights.map(h => h.start).join(',');
         const ends = highlights.map(h => h.end).join(',');
-        const combinedSnippet = highlights.map(h => h.snippet.substring(0, 12)).join('.. ');
-
+        const combinedSnippet = highlights.map(h => h.snippet.substring(0, 10)).join('.. ');
         const url = `http://wangzhrm.github.io/ASTeng/highlight?id=${passageId}&s=${starts}&e=${ends}`;
 
         await db.collection('links').add({
@@ -228,45 +172,33 @@
             url: url,
             created: Date.now()
         });
-
-        alert("Link Created! You can now clear or refresh.");
-        loadPassage(); // Reset visual state
+        alert("Link Created!");
+        loadPassage();
     }
 
-    // --- DATA HANDLING ---
     function loadPassage() {
         const test = document.getElementById('main-test-select').value;
         const text = document.getElementById('main-text-select').value;
         if(!test || !text) return;
-
         const pId = `${test}_${text}`;
         db.collection('passages').doc(pId).get().then(doc => {
-            document.getElementById('display-box').innerText = doc.exists ? doc.data().content : "No content.";
+            document.getElementById('display-box').textContent = doc.exists ? doc.data().content : "No content.";
             refreshHighlightState();
         });
-
         db.collection('links').where('passageId', '==', pId).onSnapshot(snap => {
             const list = document.getElementById('link-list');
-            if(snap.empty) { list.innerHTML = '<div style="color:#999; text-align:center;">No links saved.</div>'; return; }
-            
+            if(snap.empty) { list.innerHTML = '<div style="color:#999; text-align:center;">No links.</div>'; return; }
             let docs = [];
             snap.forEach(doc => docs.push({id: doc.id, ...doc.data()}));
             docs.sort((a, b) => b.created - a.created);
-
             list.innerHTML = '';
             docs.forEach(d => {
-                list.innerHTML += `
-                    <div class="link-item">
-                        <div class="link-info"><a href="${d.url}" target="_blank">"${d.snippet}..."</a></div>
-                        <button class="btn-del-link" onclick="deleteLink('${d.id}')">Del</button>
-                    </div>`;
+                list.innerHTML += `<div class="link-item"><div class="link-info"><a href="${d.url}" target="_blank">"${d.snippet}..."</a></div><button class="btn-del-link" onclick="deleteLink('${d.id}')">Del</button></div>`;
             });
         });
     }
 
-    function deleteLink(id) { if(confirm("Delete this link?")) db.collection('links').doc(id).delete(); }
-
-    // --- SIDEBAR BOILERPLATE ---
+    function deleteLink(id) { if(confirm("Delete?")) db.collection('links').doc(id).delete(); }
     function toggleTier2() {
         const v = document.getElementById('struct-test-select').value;
         document.getElementById('new-text-code').disabled = !v;
@@ -299,8 +231,6 @@
         const t = document.getElementById('main-test-select').value, x = document.getElementById('main-text-select').value, c = document.getElementById('passage-input').value;
         if(t && x) db.collection('passages').doc(`${t}_${x}`).set({test:t, text:x, content:c}).then(()=>alert("Saved!"));
     }
-
-    // --- RESIZER ---
     const sb = document.getElementById('sidebar'), rz = document.getElementById('resizer');
     let m_pos;
     rz.addEventListener("mousedown", (e) => { m_pos = e.x; document.addEventListener("mousemove", resize); });
