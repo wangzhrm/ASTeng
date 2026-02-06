@@ -2,68 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AST Reading Viewer</title>
+    <title>AST Reader</title>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <style>
-        body {
-            margin: 0;
-            background: #fdfdfd;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            font-family: 'Georgia', serif;
-        }
-        .container {
-            background: white;
-            width: 90%;
-            max-width: 750px;
-            padding: 60px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            border-radius: 2px;
-            line-height: 1.9;
-            font-size: 1.2em;
-            color: #2c3e50;
-            white-space: pre-wrap;
-            position: relative;
-        }
-        mark {
-            background-color: #fff176;
-            color: black;
-            padding: 2px 4px;
-            border-radius: 3px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .header-info {
-            font-family: sans-serif;
-            font-size: 0.7em;
-            color: #bdc3c7;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border-bottom: 1px solid #eee;
-            margin-bottom: 30px;
-            padding-bottom: 10px;
-        }
+        body { margin: 0; background: #fafafa; display: flex; justify-content: center; min-height: 100vh; font-family: 'Georgia', serif; }
+        .container { background: white; width: 90%; max-width: 800px; padding: 60px; box-shadow: 0 4px 30px rgba(0,0,0,0.05); line-height: 2; font-size: 1.25em; white-space: pre-wrap; margin-top: 50px; }
+        mark { background: #ffeb3b; padding: 2px 4px; border-radius: 2px; }
+        .meta { font-family: sans-serif; font-size: 12px; color: #bbb; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #eee; margin-bottom: 30px; padding-bottom: 10px; }
     </style>
 </head>
 <body>
-
-<div id="viewer" class="container">Retrieving passage...</div>
-
+    <div id="content-view" class="container">Loading...</div>
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyDQP8wkV6Hu314ajhwcWGfyD8PIeeUh7Zo",
         authDomain: "ast-eng.firebaseapp.com",
         projectId: "ast-eng",
         storageBucket: "ast-eng.firebasestorage.app",
-        databaseURL: "https://ast-eng-default-rtdb.firebaseio.com/",
         messagingSenderId: "476969710355",
         appId: "1:476969710355:web:d993d06afb8873fbc220e6"
     };
-    
     firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+    const db = firebase.firestore();
 
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
@@ -71,26 +32,20 @@
     const e = parseInt(params.get('e'));
 
     if (id) {
-        db.ref('passages/' + id).once('value', snapshot => {
-            const data = snapshot.val();
-            if (data) {
-                const fullText = data.content;
-                const before = fullText.substring(0, s);
-                const highlighted = fullText.substring(s, e);
-                const after = fullText.substring(e);
-
-                document.getElementById('viewer').innerHTML = `
-                    <div class="header-info">${data.test} / ${data.text}</div>
-                    <span>${escape(before)}</span><mark>${escape(highlighted)}</mark><span>${escape(after)}</span>
+        db.collection('passages').doc(id).get().then(doc => {
+            if (doc.exists) {
+                const data = doc.data();
+                const text = data.content;
+                document.getElementById('content-view').innerHTML = `
+                    <div class="meta">${data.test} / ${data.text}</div>
+                    <span>${escape(text.substring(0, s))}</span><mark>${escape(text.substring(s, e))}</mark><span>${escape(text.substring(e))}</span>
                 `;
-            }
+            } else { document.getElementById('content-view').innerText = "Passage not found."; }
         });
     }
 
-    function escape(text) {
-        const p = document.createElement('p');
-        p.textContent = text;
-        return p.innerHTML;
+    function escape(unsafe) {
+        return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 </script>
 </body>
