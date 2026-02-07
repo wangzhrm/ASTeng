@@ -159,6 +159,11 @@
         const text = document.getElementById('main-text-select').value;
         if (highlights.length === 0 || !test || !text) return;
 
+        // --- NEW CHANGE: Prompt for Link Name ---
+        const linkName = prompt("Please enter a name for this link:");
+        if (!linkName) return; // Exit if user cancelled or entered nothing
+        // ----------------------------------------
+
         const passageId = `${test}_${text}`;
         highlights.sort((a, b) => a.start - b.start);
         const starts = highlights.map(h => h.start).join(',');
@@ -168,6 +173,7 @@
 
         await db.collection('links').add({
             passageId: passageId,
+            name: linkName, // Saving the name
             snippet: combinedSnippet,
             url: url,
             created: Date.now()
@@ -193,7 +199,18 @@
             docs.sort((a, b) => b.created - a.created);
             list.innerHTML = '';
             docs.forEach(d => {
-                list.innerHTML += `<div class="link-item"><div class="link-info"><a href="${d.url}" target="_blank">"${d.snippet}..."</a></div><button class="btn-del-link" onclick="deleteLink('${d.id}')">Del</button></div>`;
+                // --- NEW CHANGE: Display Name and Snippet ---
+                const displayName = d.name || "Untitled"; 
+                list.innerHTML += `<div class="link-item">
+                    <div class="link-info">
+                        <a href="${d.url}" target="_blank">
+                            ${displayName} 
+                            <span style="font-weight:normal; font-size:11px; color:#999;">(${d.snippet}...)</span>
+                        </a>
+                    </div>
+                    <button class="btn-del-link" onclick="deleteLink('${d.id}')">Del</button>
+                </div>`;
+                // --------------------------------------------
             });
         });
     }
